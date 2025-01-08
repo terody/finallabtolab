@@ -3,7 +3,16 @@ import { Users, Building2, MessageSquare, TrendingUp, Eye, MousePointerClick, Cl
 import StatsCard from './StatsCard';
 import ActivityChart from './ActivityChart';
 import EngagementChart from './EngagementChart';
+import { useNavigate } from 'react-router-dom';
+import { signUp } from '../lib/auth';
+import type { UserRole } from '../types/user';
 
+const sampleActivityData = [
+  { name: 'Jan', users: 400, labs: 240 },
+  { name: 'Feb', users: 300, labs: 139 },
+  { name: 'Mar', users: 200, labs: 980 },
+  { name: 'Apr', users: 278, labs: 390 },
+  { name: 'May', users: 189, labs: 480 },
 const AnalyticsDashboard = () => {
   const [stats, setStats] = useState({
     totalViews: 0,
@@ -13,6 +22,47 @@ const AnalyticsDashboard = () => {
     clickRate: 0,
     conversionRate: 0
   });
+
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    role: 'professional' as UserRole,
+    title: '',
+    company: '',
+    certifications: '',
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    const { data, error: signUpError } = await signUp(
+      formData.email,
+      formData.password,
+      {
+        name: formData.name,
+        role: formData.role,
+        title: formData.title,
+        company: formData.company,
+        certifications: formData.certifications
+      }
+    );
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    navigate('/login', { 
+      state: { message: 'Registration successful! Please log in with your credentials.' }
+    });
+  };
 
   // Simulate real-time updates
   useEffect(() => {
