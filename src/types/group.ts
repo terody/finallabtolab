@@ -1,3 +1,5 @@
+import type { Post } from "./forum";
+
 export interface Group {
   id: string;
   name: string;

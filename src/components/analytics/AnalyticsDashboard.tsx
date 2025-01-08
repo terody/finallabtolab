@@ -86,7 +86,7 @@ const AnalyticsDashboard = () => {
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-semibold mb-4">User Activity</h3>
-          <ActivityChart />
+          <ActivityChart data={sampleActivityData} />
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-sm">
