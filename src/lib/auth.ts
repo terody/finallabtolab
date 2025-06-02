@@ -33,7 +33,10 @@ export async function signIn(email: string, password: string) {
       password
     });
 
-    if (error) throw error;
+    if (error) {
+      console.log("sign in failed; ", error)
+      throw error
+    };
     return { data, error: null };
   } catch (error) {
     console.error('Sign in error:', error);
