@@ -35,7 +35,7 @@ export default function Register() {
     );
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError('Registration failed. Please try again.');
       setLoading(false);
       return;
     }
