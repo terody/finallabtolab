@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import type { Group } from '../types/group';
-import type { GroupPost } from '../types/group';
+import type { Post } from '../types/forum';
 import PostCard from './PostCard';
 
 interface GroupDiscussionsProps {
@@ -11,15 +11,14 @@ interface GroupDiscussionsProps {
 }
 
 export default function GroupDiscussions({ group, onBack, currentUserId }: GroupDiscussionsProps) {
-  const [posts, setPosts] = useState<GroupPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState('');
 
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPostContent.trim()) {
-      const newPost: GroupPost = {
+      const newPost: Post = {
         id: Date.now().toString(),
-        groupId: group.id,
         userId: currentUserId,
         userName: 'Current User',
         content: newPostContent,
