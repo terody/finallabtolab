@@ -1,16 +1,16 @@
-import { Routes, Route } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import Home from '../pages/Home';
-import Directory from '../pages/Directory';
-import Community from '../pages/Community';
-import Marketplace from '../pages/Marketplace';
-import Contact from '../pages/Contact';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import JobBoard from '../pages/JobBoard';
-import AdminDashboard from '../pages/AdminDashboard';
-import { RequireAuth } from '../context/AuthContext';
+import { Route, Routes } from "react-router-dom";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import RequireAuth from "../components/RequireAuth";
+import AdminDashboard from "../pages/AdminDashboard";
+import Community from "../pages/Community";
+import Contact from "../pages/Contact";
+import Directory from "../pages/Directory";
+import Home from "../pages/Home";
+import JobBoard from "../pages/JobBoard";
+import Login from "../pages/Login";
+import Marketplace from "../pages/Marketplace";
+import Register from "../pages/Register";
 
 export default function AppRoutes() {
   return (

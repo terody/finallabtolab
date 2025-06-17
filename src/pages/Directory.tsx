@@ -1,13 +1,20 @@
-import { useState } from 'react';
-import { Search, MapPin, Filter, Building2, Phone, Mail, Globe, Flag } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import LabMap from '../components/LabMap';
-import { orangeCountyLabs } from '../data/orangeCountyLabs';
-import type { Lab } from '../types/lab';
+import {
+  Building2,
+  Filter,
+  Flag,
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+  Search,
+} from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import LabMap from "../components/LabMap";
+import { orangeCountyLabs } from "../data/orangeCountyLabs";
+import type { Lab } from "../types/lab";
 
 function Directory() {
-  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLab, setSelectedLab] = useState<Lab | null>(null);
   const [filteredLabs, setFilteredLabs] = useState(orangeCountyLabs);
@@ -18,13 +25,14 @@ function Directory() {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    
-    const filtered = orangeCountyLabs.filter(lab => 
-      lab.name.toLowerCase().includes(term) ||
-      lab.location.toLowerCase().includes(term) ||
-      lab.services.some(service => service.toLowerCase().includes(term))
+
+    const filtered = orangeCountyLabs.filter(
+      (lab) =>
+        lab.name.toLowerCase().includes(term) ||
+        lab.location.toLowerCase().includes(term) ||
+        lab.services.some((service) => service.toLowerCase().includes(term))
     );
-    
+
     setFilteredLabs(filtered);
   };
 
@@ -52,12 +60,12 @@ function Directory() {
             <Filter className="h-5 w-5 text-gray-600" />
             <span>Filters</span>
           </button>
-          <button 
+          <button
             onClick={() => setShowMap(!showMap)}
             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             <MapPin className="h-5 w-5" />
-            <span>{showMap ? 'Show List' : 'View Map'}</span>
+            <span>{showMap ? "Show List" : "View Map"}</span>
           </button>
         </div>
       </div>
@@ -65,10 +73,7 @@ function Directory() {
       {/* Map View */}
       {showMap && (
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <LabMap 
-            labs={filteredLabs} 
-            onLabSelect={setSelectedLab}
-          />
+          <LabMap labs={filteredLabs} onLabSelect={setSelectedLab} />
         </div>
       )}
 
@@ -86,7 +91,7 @@ function Directory() {
                     </span>
                   )}
                 </div>
-                <button 
+                <button
                   onClick={() => setSelectedLab(null)}
                   className="text-gray-500 hover:text-gray-700"
                 >
@@ -119,7 +124,7 @@ function Directory() {
                   {selectedLab.website && (
                     <div className="flex items-center text-gray-600">
                       <Globe className="h-5 w-5 mr-2" />
-                      <a 
+                      <a
                         href={selectedLab.website}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -183,9 +188,13 @@ function Directory() {
       {showClaimModal && labToClaim && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold mb-4">Claim {labToClaim.name}</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              Claim {labToClaim.name}
+            </h3>
             <p className="text-gray-600 mb-6">
-              To claim this laboratory listing, you need to register or log in to your account. During registration, make sure to check "My lab is already listed in the directory".
+              To claim this laboratory listing, you need to register or log in
+              to your account. During registration, make sure to check "My lab
+              is already listed in the directory".
             </p>
             <div className="flex justify-end space-x-3">
               <button
@@ -217,12 +226,21 @@ function Directory() {
       {!showMap && (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredLabs.map((lab) => (
-            <div key={lab.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-              <img src={lab.image} alt={lab.name} className="w-full h-48 object-cover" />
+            <div
+              key={lab.id}
+              className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+            >
+              <img
+                src={lab.image}
+                alt={lab.name}
+                className="w-full h-48 object-cover"
+              />
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{lab.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {lab.name}
+                    </h3>
                     {!lab.claimed && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
                         Unclaimed
@@ -235,9 +253,11 @@ function Directory() {
                   </div>
                   <Building2 className="h-6 w-6 text-blue-600" />
                 </div>
-                
+
                 <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-900">Services:</h4>
+                  <h4 className="text-sm font-medium text-gray-900">
+                    Services:
+                  </h4>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {lab.services.map((service, index) => (
                       <span
@@ -251,7 +271,9 @@ function Directory() {
                 </div>
 
                 <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-900">Certifications:</h4>
+                  <h4 className="text-sm font-medium text-gray-900">
+                    Certifications:
+                  </h4>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {lab.certifications.map((cert, index) => (
                       <span
@@ -265,13 +287,13 @@ function Directory() {
                 </div>
 
                 <div className="mt-6 space-y-3">
-                  <button 
+                  <button
                     onClick={() => setSelectedLab(lab)}
                     className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
                   >
                     View Profile
                   </button>
-                  
+
                   {!lab.claimed && (
                     <button
                       onClick={() => handleClaimLab(lab)}

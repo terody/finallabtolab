@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import DashboardLayout from '../components/DashboardLayout';
-import VisitsChart from '../components/analytics/VisitsChart';
-import LabClicksChart from '../components/analytics/LabClicksChart';
-import { getAnalytics } from '../lib/api/analytics';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DashboardLayout from "../components/DashboardLayout";
+import LabClicksChart from "../components/analytics/LabClicksChart";
+import VisitsChart from "../components/analytics/VisitsChart";
+import { useAuth } from "../hooks/useAuth";
+import { getAnalytics } from "../lib/api/analytics";
 
 export default function AdminDashboard() {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  const [analytics, setAnalytics] = useState<any>({ pageViews: [], labClicks: [] });
+  const [analytics, setAnalytics] = useState<any>({
+    pageViews: [],
+    labClicks: [],
+  });
 
   useEffect(() => {
-    if (profile?.role !== 'admin') {
-      navigate('/');
+    if (profile?.role !== "admin") {
+      navigate("/");
     }
   }, [profile, navigate]);
 
@@ -29,12 +32,16 @@ export default function AdminDashboard() {
     <DashboardLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Analytics Dashboard
+          </h1>
           <p className="text-gray-600">Track website traffic and engagement</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold mb-4">Page Views (Last 7 Days)</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            Page Views (Last 7 Days)
+          </h2>
           <VisitsChart pageViews={analytics.pageViews} />
         </div>
 
