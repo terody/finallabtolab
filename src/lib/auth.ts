@@ -17,6 +17,7 @@ export async function signUp(email: string, password: string, userData: {
         emailRedirectTo: `${window.location.href}/auth/callback`
       }
     });
+    console.log(`emailRedirectTo: ${window.location.href}/auth/callback`)
     if (error) throw error;
     return { data, error: null };
   } catch (error) {

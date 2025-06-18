@@ -1,26 +1,26 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signUp } from '../lib/auth';
-import type { UserRole } from '../types/user';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signUp } from "../lib/auth";
+import type { UserRole } from "../types/user";
 
 export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    role: 'professional' as UserRole,
-    title: '',
-    company: '',
-    certifications: '',
+    email: "",
+    password: "",
+    name: "",
+    role: "professional" as UserRole,
+    title: "",
+    company: "",
+    certifications: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     const { data, error: signUpError } = await signUp(
       formData.email,
@@ -30,18 +30,21 @@ export default function Register() {
         role: formData.role,
         title: formData.title,
         company: formData.company,
-        certifications: formData.certifications
+        certifications: formData.certifications,
       }
     );
 
     if (signUpError) {
-      setError('Registration failed. Please try again.');
+      setError("Registration failed. Please try again.");
       setLoading(false);
       return;
     }
 
-    navigate('/login', { 
-      state: { message: 'Registration successful! Please log in with your credentials.' }
+    navigate("/login", {
+      state: {
+        message:
+          "Please complete your registration by checking your email and verifying your address.",
+      },
     });
   };
 
@@ -49,7 +52,9 @@ export default function Register() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Create an Account</h2>
+          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+            Create an Account
+          </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Join our community of laboratory professionals
           </p>
@@ -71,7 +76,9 @@ export default function Register() {
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value as UserRole })
+                }
               >
                 <option value="professional">Laboratory Professional</option>
                 <option value="lab">Laboratory</option>
@@ -87,7 +94,9 @@ export default function Register() {
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
             </div>
 
@@ -100,7 +109,9 @@ export default function Register() {
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </div>
 
@@ -114,12 +125,16 @@ export default function Register() {
                 minLength={6}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
               />
-              <p className="mt-1 text-sm text-gray-500">Must be at least 6 characters</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Must be at least 6 characters
+              </p>
             </div>
 
-            {formData.role === 'professional' && (
+            {formData.role === "professional" && (
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -129,7 +144,9 @@ export default function Register() {
                     type="text"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
                     placeholder="e.g., Clinical Laboratory Scientist"
                   />
                 </div>
@@ -142,7 +159,9 @@ export default function Register() {
                     type="text"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, company: e.target.value })
+                    }
                   />
                 </div>
 
@@ -154,10 +173,17 @@ export default function Register() {
                     type="text"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     value={formData.certifications}
-                    onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        certifications: e.target.value,
+                      })
+                    }
                     placeholder="e.g., CLS, MLS, MT (ASCP)"
                   />
-                  <p className="mt-1 text-sm text-gray-500">Separate multiple certifications with commas</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Separate multiple certifications with commas
+                  </p>
                 </div>
               </>
             )}
@@ -169,7 +195,7 @@ export default function Register() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? "Creating account..." : "Create Account"}
             </button>
           </div>
         </form>
