@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { signUp } from "../lib/auth";
 import type { UserRole } from "../types/user";
 
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { eye } from "react-icons-kit/feather/eye";
+
 export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -16,7 +20,18 @@ export default function Register() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(eyeOff);
 
+  const handleToggle = () => {
+    if (type === "password") {
+      setIcon(eye);
+      setType("text");
+    } else {
+      setIcon(eyeOff);
+      setType("password");
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -119,16 +134,24 @@ export default function Register() {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-              />
+              <div>
+                <input
+                  type={type}
+                  required
+                  minLength={6}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                />
+                <span
+                  className="mt-1 flex justify-around items-center"
+                  onClick={handleToggle}
+                >
+                  <Icon icon={icon} size={20} />
+                </span>
+              </div>
               <p className="mt-1 text-sm text-gray-500">
                 Must be at least 6 characters
               </p>
