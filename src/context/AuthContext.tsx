@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import type { UserProfile } from "../types/user";
 
-interface AuthContextType {
+export interface AuthContextType {
   user: any | null;
   profile: UserProfile | null;
   loading: boolean;

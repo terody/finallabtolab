@@ -1,4 +1,4 @@
-export interface Lab {
+ export interface Lab {
   id: number;
   name: string;
   location: string;
@@ -10,10 +10,6 @@ export interface Lab {
   certifications: string[];
   description: string;
   image: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
   claimed?: boolean;
   claimedBy?: string;
 }
