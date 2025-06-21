@@ -2,13 +2,15 @@ import React from "react";
 import { MapPin, Building2, Mail, Phone, Globe, Edit } from "lucide-react";
 import { Lab } from "../types/lab";
 
-interface LabCardProps {
+export interface LabCardProps {
   lab: Lab;
   isAdmin?: boolean;
   onEdit?: (lab: Lab) => void;
+  onViewProfile: (lab: Lab) => void;
+  onClaim: (lab: Lab) => void;
 }
 
-function LabCard({ lab, isAdmin = false, onEdit }: LabCardProps) {
+function LabCard({ lab, isAdmin = false, onEdit, onViewProfile, onClaim }: LabCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="relative">
