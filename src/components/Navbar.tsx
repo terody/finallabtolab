@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom';
-import { TestTube2, Users, Building2, ShoppingBag, Briefcase, LogIn } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import {
+  Briefcase,
+  Building2,
+  LogIn,
+  ShoppingBag,
+  TestTube2,
+  Users,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
 
 function Navbar() {
   const { user, profile, signOut } = useAuth();
-
+  const [visible, setVisible] = useState(false);
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,36 +20,57 @@ function Navbar() {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <TestTube2 className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">Lab to Lab</span>
+              <span className="text-xl font-bold text-gray-900">
+                Lab to Lab
+              </span>
             </Link>
           </div>
-          
+
           <div className="hidden sm:flex sm:items-center sm:space-x-8">
-            <Link to="/directory" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
+            <Link
+              to="/directory"
+              className="flex items-center space-x-1 text-gray-700 hover:text-blue-600"
+            >
               <Building2 className="h-5 w-5" />
               <span>Directory</span>
             </Link>
-            <Link to="/community" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
-              <Users className="h-5 w-5" />
-              <span>Community</span>
-            </Link>
-            <Link to="/marketplace" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
-              <ShoppingBag className="h-5 w-5" />
-              <span>Marketplace</span>
-            </Link>
-            <Link to="/jobs" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
-              <Briefcase className="h-5 w-5" />
-              <span>Jobs</span>
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600">
-              Contact
-            </Link>
-            
+            {visible ? (
+              <Link
+                to="/community"
+                className="flex items-center space-x-1 text-gray-700 hover:text-blue-600"
+              >
+                <Users className="h-5 w-5" />
+                <span>Community</span>
+              </Link>
+            ) : null}
+            {visible ? (
+              <Link
+                to="/marketplace"
+                className="flex items-center space-x-1 text-gray-700 hover:text-blue-600"
+              >
+                <ShoppingBag className="h-5 w-5" />
+                <span>Marketplace</span>
+              </Link>
+            ) : null}
+            {visible ? (
+              <Link
+                to="/jobs"
+                className="flex items-center space-x-1 text-gray-700 hover:text-blue-600"
+              >
+                <Briefcase className="h-5 w-5" />
+                <span>Jobs</span>
+              </Link>
+            ) : null}
+            {visible ? (
+              <Link to="/contact" className="text-gray-700 hover:text-blue-600">
+                Contact
+              </Link>
+            ) : null}
             {user ? (
               <div className="flex items-center space-x-4">
-                {profile?.role === 'admin' && (
-                  <Link 
-                    to="/admin" 
+                {profile?.role === "admin" && (
+                  <Link
+                    to="/admin"
                     className="text-blue-600 hover:text-blue-700"
                   >
                     Dashboard
@@ -55,8 +84,8 @@ function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="flex items-center space-x-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
               >
                 <LogIn className="h-5 w-5" />

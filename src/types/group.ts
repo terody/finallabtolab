@@ -1,4 +1,4 @@
-import type { Post } from "./forum";
+import type { Post } from './forum';
 
 export interface Group {
   id: string;

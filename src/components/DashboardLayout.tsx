@@ -1,5 +1,5 @@
-import { useAuth } from '../context/AuthContext';
-import { LogOut } from 'lucide-react';
+import { LogOut } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,8 +15,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-              <p className="text-sm text-gray-600">Welcome back, {profile?.name}</p>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                Dashboard
+              </h1>
+              <p className="text-sm text-gray-600">
+                Welcome back, {profile?.name}
+              </p>
             </div>
             <button
               onClick={signOut}

@@ -1,24 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import DashboardLayout from '../components/DashboardLayout';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { Users, Building2, MessageSquare, TrendingUp } from 'lucide-react';
+import { Building2, MessageSquare, TrendingUp, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import DashboardLayout from "../components/DashboardLayout";
+import { useAuth } from "../hooks/useAuth";
 
 const sampleData = {
   stats: {
     totalUsers: 245,
     totalLabs: 45,
     totalPosts: 89,
-    conversionRate: 12
+    conversionRate: 12,
   },
   activityData: [
-    { name: 'Jan', users: 400, labs: 240 },
-    { name: 'Feb', users: 300, labs: 139 },
-    { name: 'Mar', users: 200, labs: 980 },
-    { name: 'Apr', users: 278, labs: 390 },
-    { name: 'May', users: 189, labs: 480 },
-  ]
+    { name: "Jan", users: 400, labs: 240 },
+    { name: "Feb", users: 300, labs: 139 },
+    { name: "Mar", users: 200, labs: 980 },
+    { name: "Apr", users: 278, labs: 390 },
+    { name: "May", users: 189, labs: 480 },
+  ],
 };
 
 export default function Dashboard() {
@@ -28,8 +36,8 @@ export default function Dashboard() {
   const [activityData, setActivityData] = useState(sampleData.activityData);
 
   useEffect(() => {
-    if (profile?.role !== 'admin') {
-      navigate('/');
+    if (profile?.role !== "admin") {
+      navigate("/");
     }
   }, [profile, navigate]);
 

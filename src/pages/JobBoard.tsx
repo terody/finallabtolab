@@ -161,14 +161,6 @@ export default function JobBoard() {
           </div>
         ))}
       </div>
-
-      {/* Create Job Modal */}
-      {showCreateModal && (
-        <CreateJobModal
-          onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateJob}
-        />
-      )}
     </div>
   );
 }

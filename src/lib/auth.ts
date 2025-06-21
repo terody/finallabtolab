@@ -14,10 +14,10 @@ export async function signUp(email: string, password: string, userData: {
       password,
       options: {
         data: userData,
-        emailRedirectTo: `${window.location.origin}/auth/callback`
+        emailRedirectTo: `${window.location.href}/auth/callback`
       }
     });
-
+    console.log(`emailRedirectTo: ${window.location.href}/auth/callback`)
     if (error) throw error;
     return { data, error: null };
   } catch (error) {

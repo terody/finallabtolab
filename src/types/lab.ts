@@ -1,4 +1,4 @@
-export interface Lab {
+ export interface Lab {
   id: number;
   name: string;
   location: string;
