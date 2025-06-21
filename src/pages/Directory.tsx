@@ -5,6 +5,7 @@ import LabCard from "../components/LabCard";
 import EditLabModal from "../components/EditLabModal";
 import { Lab } from "../types/lab";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Directory() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,6 +13,7 @@ function Directory() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { labs, loading, error, searchLabs, refetch } = useLabs();
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
 
   // Debounce search
   useEffect(() => {
@@ -35,6 +37,17 @@ function Directory() {
   const handleCloseModal = () => {
     setIsEditModalOpen(false);
     setEditingLab(null);
+  };
+
+  // Add these handlers for the new LabCard props:
+  const handleViewProfile = (lab: Lab) => {
+    // Example: navigate to a lab profile page
+    navigate(`/labs/${lab.id}`);
+  };
+
+  const handleClaim = (lab: Lab) => {
+    alert(`Claim request for ${lab.name}`);
+    // You can open a modal or trigger your claim logic here
   };
 
   if (error) {
@@ -126,22 +139,14 @@ function Directory() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {labs.map((lab) => (
-                <div key={lab.id} className="relative">
-                  <LabCard
-                    lab={lab}
-                    isAdmin={user ? profile?.role === "admin" : false}
-                    onEdit={handleEditLab}
-                  />
-                  {/* Claim Button */}
-                  {!lab.claimed && (
-                    <button
-                      className="absolute top-4 right-4 bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-3 py-1 rounded shadow"
-                      onClick={() => alert(`Claim request for ${lab.name}`)}
-                    >
-                      Claim
-                    </button>
-                  )}
-                </div>
+                <LabCard
+                  key={lab.id}
+                  lab={lab}
+                  isAdmin={user ? profile?.role === "admin" : false}
+                  onEdit={handleEditLab}
+                  onViewProfile={handleViewProfile}
+                  onClaim={handleClaim}
+                />
               ))}
             </div>
           )}
