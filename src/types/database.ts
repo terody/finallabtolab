@@ -12,9 +12,10 @@ export type Database = {
       lab: {
         Row: {
           address: string | null
-          certifications: string | null
+          certifications: string[] | null
           claimed: boolean | null
           claimed_by: string | null
+          created_at: string | null
           description: string | null
           email: string | null
           id: string
@@ -22,14 +23,16 @@ export type Database = {
           location: string | null
           name: string
           phone: string | null
-          services: string | null
+          services: string[] | null
+          updated_at: string | null
           website: string | null
         }
         Insert: {
           address?: string | null
-          certifications?: string | null
+          certifications?: string[] | null
           claimed?: boolean | null
           claimed_by?: string | null
+          created_at?: string | null
           description?: string | null
           email?: string | null
           id?: string
@@ -37,14 +40,16 @@ export type Database = {
           location?: string | null
           name: string
           phone?: string | null
-          services?: string | null
+          services?: string[] | null
+          updated_at?: string | null
           website?: string | null
         }
         Update: {
           address?: string | null
-          certifications?: string | null
+          certifications?: string[] | null
           claimed?: boolean | null
           claimed_by?: string | null
+          created_at?: string | null
           description?: string | null
           email?: string | null
           id?: string
@@ -52,7 +57,8 @@ export type Database = {
           location?: string | null
           name?: string
           phone?: string | null
-          services?: string | null
+          services?: string[] | null
+          updated_at?: string | null
           website?: string | null
         }
         Relationships: []
