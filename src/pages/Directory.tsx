@@ -52,7 +52,7 @@ function Directory() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
           <h1 className="text-4xl font-bold text-gray-900">
-            Laboratory Directory 🚀
+            Laboratory Directory 
           </h1>
 
           {user?.profile?.role === "admin" && (
@@ -126,12 +126,22 @@ function Directory() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {labs.map((lab) => (
-                <LabCard
-                  key={lab.id}
-                  lab={lab}
-                  isAdmin={user ? profile?.role === "admin" : false}
-                  onEdit={handleEditLab}
-                />
+                <div key={lab.id} className="relative">
+                  <LabCard
+                    lab={lab}
+                    isAdmin={user ? profile?.role === "admin" : false}
+                    onEdit={handleEditLab}
+                  />
+                  {/* Claim Button */}
+                  {!lab.claimed && (
+                    <button
+                      className="absolute top-4 right-4 bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-3 py-1 rounded shadow"
+                      onClick={() => alert(`Claim request for ${lab.name}`)}
+                    >
+                      Claim
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           )}
