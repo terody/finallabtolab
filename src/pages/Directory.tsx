@@ -52,7 +52,7 @@ function Directory() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
           <h1 className="text-4xl font-bold text-gray-900">
-            Laboratory Directory
+            Laboratory Directory 🚀
           </h1>
 
           {user?.profile?.role === "admin" && (
