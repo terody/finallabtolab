@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, Building2, Mail, Phone, Globe, Edit } from "lucide-react";
+import { MapPin, Building2, Mail, Phone, Globe, Edit, Flag } from "lucide-react";
 import { Lab } from "../types/lab";
 
 export interface LabCardProps {
@@ -130,9 +130,24 @@ function LabCard({ lab, isAdmin = false, onEdit, onViewProfile, onClaim }: LabCa
           )}
         </div>
 
-        <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200">
-          View Profile
-        </button>
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={() => onViewProfile(lab)}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 font-medium"
+          >
+            View Profile
+          </button>
+
+          {!lab.claimed && (
+            <button
+              onClick={() => onClaim(lab)}
+              className="w-full flex items-center justify-center space-x-2 border border-blue-600 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-50 transition-colors duration-200 font-medium bg-white"
+            >
+              <Flag className="h-5 w-5 mr-2" />
+              <span>Claim This Lab</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
