@@ -3,13 +3,16 @@ import { Search, MapPin, Filter, Loader2, Shield } from "lucide-react";
 import { useLabs } from "../hooks/useLabs";
 import LabCard from "../components/LabCard";
 import EditLabModal from "../components/EditLabModal";
+import LabProfileModal from "../components/LabProfileModal";
 import { Lab } from "../types/lab";
 import { useAuth } from "../hooks/useAuth";
 
 function Directory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingLab, setEditingLab] = useState<Lab | null>(null);
+  const [viewingLab, setViewingLab] = useState<Lab | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const { labs, loading, error, searchLabs, refetch } = useLabs();
   const { user, profile } = useAuth();
 
@@ -27,14 +30,24 @@ function Directory() {
     setIsEditModalOpen(true);
   };
 
+  const handleViewDetails = (lab: Lab) => {
+    setViewingLab(lab);
+    setIsViewModalOpen(true);
+  };
+
   const handleSaveLab = (updatedLab: Lab) => {
     // Refresh the labs list to show updated data
     refetch();
   };
 
-  const handleCloseModal = () => {
+  const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditingLab(null);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setViewingLab(null);
   };
 
   if (error) {
@@ -131,6 +144,7 @@ function Directory() {
                   lab={lab}
                   isAdmin={user ? profile?.role === "admin" : false}
                   onEdit={handleEditLab}
+                  onViewDetails={handleViewDetails}
                 />
               ))}
             </div>
@@ -143,8 +157,17 @@ function Directory() {
         <EditLabModal
           lab={editingLab}
           isOpen={isEditModalOpen}
-          onClose={handleCloseModal}
+          onClose={handleCloseEditModal}
           onSave={handleSaveLab}
+        />
+      )}
+
+      {/* View Details Modal */}
+      {viewingLab && (
+        <LabProfileModal
+          lab={viewingLab}
+          isOpen={isViewModalOpen}
+          onClose={handleCloseViewModal}
         />
       )}
     </div>
