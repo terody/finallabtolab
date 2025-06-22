@@ -5,8 +5,10 @@ import LabCard from "../components/LabCard";
 import EditLabModal from "../components/EditLabModal";
 import { Lab } from "../types/lab";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Directory() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [editingLab, setEditingLab] = useState<Lab | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -25,6 +27,10 @@ function Directory() {
   const handleEditLab = (lab: Lab) => {
     setEditingLab(lab);
     setIsEditModalOpen(true);
+  };
+
+  const handleClaimLab = (lab: Lab) => {
+    navigate("/subscriptions");
   };
 
   const handleSaveLab = (updatedLab: Lab) => {
@@ -131,6 +137,7 @@ function Directory() {
                   lab={lab}
                   isAdmin={user ? profile?.role === "admin" : false}
                   onEdit={handleEditLab}
+                  onClaim={handleClaimLab}
                 />
               ))}
             </div>

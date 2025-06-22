@@ -1,0 +1,1 @@
+export { default as BusinessRegistrationForm } from '../components/BusinessRegistrationForm';

@@ -3,3 +3,5 @@ node_modules
 .vscode/extensions.json
 .vscode/launch.json
 .vscode/settings.json
+src/lib/.DS_Store
+src/.DS_Store
