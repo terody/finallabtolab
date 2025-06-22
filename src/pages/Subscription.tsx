@@ -438,11 +438,11 @@ export default function Subscription() {
                     <div className="space-y-2">
                       <div className="flex items-center text-gray-600">
                         <Phone className="w-5 h-5 mr-3" />
-                        {example.contactPhone}
+                        {/* {example.contactPhone} */}
                       </div>
                       <div className="flex items-center text-gray-600">
                         <Mail className="w-5 h-5 mr-3" />
-                        {example.contactEmail}
+                        {/* {example.contactEmail} */}
                       </div>
                     </div>
                   </div>
@@ -453,7 +453,7 @@ export default function Subscription() {
                     <div className="flex items-center text-blue-600">
                       <Globe className="w-5 h-5 mr-3" />
                       <a href="#" className="hover:underline">
-                        {example.website}
+                        {/* {example.website} */}
                       </a>
                     </div>
                   </div>
@@ -465,7 +465,7 @@ export default function Subscription() {
                       Client References:
                     </h4>
                     <div className="space-y-2">
-                      {example.references?.map((ref, index) => (
+                      {/* {example.references?.map((ref, index) => (
                         <div
                           key={index}
                           className="flex items-center text-gray-600"
@@ -473,7 +473,7 @@ export default function Subscription() {
                           <Star className="w-5 h-5 mr-3 text-yellow-500" />
                           {ref}
                         </div>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
                 )}
@@ -484,7 +484,7 @@ export default function Subscription() {
                       Downloads:
                     </h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {example.downloads?.map((download, index) => (
+                      {/* {example.downloads?.map((download, index) => (
                         <button
                           key={index}
                           className="flex items-center text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors"
@@ -492,7 +492,7 @@ export default function Subscription() {
                           <Download className="w-4 h-4 mr-2" />
                           <span className="text-sm">{download}</span>
                         </button>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
                 )}
