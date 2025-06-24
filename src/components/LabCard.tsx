@@ -131,13 +131,6 @@ function LabCard({ lab, isAdmin = false, onEdit, onViewProfile, onClaim }: LabCa
         </div>
 
         <div className="mt-6 space-y-3">
-          <button
-            onClick={() => onViewProfile(lab)}
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 font-medium"
-          >
-            View Profile
-          </button>
-
           {!lab.claimed && (
             <button
               onClick={() => onClaim(lab)}
@@ -147,6 +140,13 @@ function LabCard({ lab, isAdmin = false, onEdit, onViewProfile, onClaim }: LabCa
               <span>Claim This Lab</span>
             </button>
           )}
+
+          <button
+            onClick={() => onViewProfile(lab)}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 font-medium"
+          >
+            View Profile
+          </button>
         </div>
       </div>
     </div>

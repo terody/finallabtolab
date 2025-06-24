@@ -46,8 +46,10 @@ function Directory() {
   };
 
   const handleClaim = (lab: Lab) => {
-    alert(`Claim request for ${lab.name}`);
-    // You can open a modal or trigger your claim logic here
+    // For now, show an alert. Later this will navigate to subscriptions page
+    alert(`Claim request for ${lab.name}. Subscriptions page will be available soon.`);
+    // TODO: Navigate to subscriptions page when implemented
+    // navigate('/subscriptions', { state: { labId: lab.id } });
   };
 
   if (error) {
