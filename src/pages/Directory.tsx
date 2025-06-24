@@ -8,12 +8,12 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 function Directory() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [editingLab, setEditingLab] = useState<Lab | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { labs, loading, error, searchLabs, refetch } = useLabs();
   const { user, profile } = useAuth();
-  const navigate = useNavigate();
 
   // Debounce search
   useEffect(() => {
@@ -27,6 +27,10 @@ function Directory() {
   const handleEditLab = (lab: Lab) => {
     setEditingLab(lab);
     setIsEditModalOpen(true);
+  };
+
+  const handleClaimLab = (lab: Lab) => {
+    navigate("/subscription");
   };
 
   const handleSaveLab = (updatedLab: Lab) => {
@@ -46,10 +50,8 @@ function Directory() {
   };
 
   const handleClaim = (lab: Lab) => {
-    // For now, show an alert. Later this will navigate to subscriptions page
-    alert(`Claim request for ${lab.name}. Subscriptions page will be available soon.`);
-    // TODO: Navigate to subscriptions page when implemented
-    // navigate('/subscriptions', { state: { labId: lab.id } });
+    alert(`Claim request for ${lab.name}`);
+    // You can open a modal or trigger your claim logic here
   };
 
   if (error) {
@@ -67,7 +69,7 @@ function Directory() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
           <h1 className="text-4xl font-bold text-gray-900">
-            Laboratory Directory 
+            Laboratory Directory
           </h1>
 
           {user?.profile?.role === "admin" && (
@@ -147,7 +149,7 @@ function Directory() {
                   isAdmin={user ? profile?.role === "admin" : false}
                   onEdit={handleEditLab}
                   onViewProfile={handleViewProfile}
-                  onClaim={handleClaim}
+                  onClaim={handleClaimLab}
                 />
               ))}
             </div>

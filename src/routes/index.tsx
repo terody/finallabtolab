@@ -11,6 +11,7 @@ import JobBoard from "../pages/JobBoard";
 import Login from "../pages/Login";
 import Marketplace from "../pages/Marketplace";
 import Register from "../pages/Register";
+import Subscription from "../pages/Subscription";
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ export default function AppRoutes() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/subscription" element={<Subscription />} />
           <Route
             path="/admin"
             element={
