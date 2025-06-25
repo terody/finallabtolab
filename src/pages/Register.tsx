@@ -32,21 +32,25 @@ export default function Register() {
       setType("password");
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    // Prepare user metadata for profile creation
+    const userMetadata = {
+      name: formData.name,
+      role: formData.role,
+      title: formData.title || null,
+      company: formData.company || null,
+      certifications: formData.certifications || null,
+    };
+
     const { data, error: signUpError } = await signUp(
       formData.email,
       formData.password,
-      {
-        name: formData.name,
-        role: formData.role,
-        title: formData.title,
-        company: formData.company,
-        certifications: formData.certifications,
-      }
+      userMetadata
     );
 
     if (signUpError) {
@@ -55,6 +59,8 @@ export default function Register() {
       return;
     }
 
+    // The profile will be automatically created by the database trigger
+    // when the user is inserted into auth.users
     navigate("/login", {
       state: {
         message:
