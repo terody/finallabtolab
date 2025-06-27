@@ -67,8 +67,6 @@ export default function Subscription() {
         { name: "Website link", included: false, icon: Globe },
         { name: "Downloadable files", included: false, icon: Download },
       ],
-      hasDownloads: false,
-      downloads: [],
     },
     {
       id: "basic",
@@ -110,8 +108,6 @@ export default function Subscription() {
         { name: "Extended paragraph length", included: false, icon: FileText },
         { name: "Downloadable files", included: false, icon: Download },
       ],
-      downloads: [],
-      hasDownloads: false,
     },
     {
       id: "premium",
@@ -209,13 +205,8 @@ export default function Subscription() {
         hasWebsite: false,
         description: null,
         hasDownloads: false,
-        downloads: [],
         hasReferences: false,
-        references: [],
         icon: Cpu,
-        contactPhone: "",
-        contactEmail: "",
-        website: "",
       },
       basic: {
         title: "BioReagents Supply Co.",
@@ -248,11 +239,8 @@ export default function Subscription() {
         description:
           "We are a leading distributor of high-quality laboratory reagents and consumables serving clinical laboratories, research institutions, and healthcare facilities throughout the region. Our comprehensive product portfolio includes reagents for clinical chemistry, hematology, immunology, and molecular diagnostics from top manufacturers worldwide. We maintain strict cold-chain management and quality control processes to ensure product integrity from manufacturer to your laboratory. Our experienced technical support team provides expert guidance on product selection, application protocols, and troubleshooting. We offer competitive pricing, reliable delivery schedules, and flexible ordering options to meet your laboratory's unique needs.",
         hasDownloads: false,
-        downloads: [],
         hasReferences: false,
-        references: [],
         icon: Package,
-        website: "",
       },
       premium: {
         title: "Precision Lab Equipment Inc.",
@@ -450,11 +438,11 @@ export default function Subscription() {
                     <div className="space-y-2">
                       <div className="flex items-center text-gray-600">
                         <Phone className="w-5 h-5 mr-3" />
-                        {example.contactPhone}
+                        {/* {example.contactPhone} */}
                       </div>
                       <div className="flex items-center text-gray-600">
                         <Mail className="w-5 h-5 mr-3" />
-                        {example.contactEmail}
+                        {/* {example.contactEmail} */}
                       </div>
                     </div>
                   </div>
@@ -465,7 +453,7 @@ export default function Subscription() {
                     <div className="flex items-center text-blue-600">
                       <Globe className="w-5 h-5 mr-3" />
                       <a href="#" className="hover:underline">
-                        {example.website}
+                        {/* {example.website} */}
                       </a>
                     </div>
                   </div>
@@ -477,7 +465,7 @@ export default function Subscription() {
                       Client References:
                     </h4>
                     <div className="space-y-2">
-                      {example.references?.map((ref, index) => (
+                      {/* {example.references?.map((ref, index) => (
                         <div
                           key={index}
                           className="flex items-center text-gray-600"
@@ -485,7 +473,7 @@ export default function Subscription() {
                           <Star className="w-5 h-5 mr-3 text-yellow-500" />
                           {ref}
                         </div>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
                 )}
@@ -496,7 +484,7 @@ export default function Subscription() {
                       Downloads:
                     </h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {example.downloads?.map((download, index) => (
+                      {/* {example.downloads?.map((download, index) => (
                         <button
                           key={index}
                           className="flex items-center text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors"
@@ -504,7 +492,7 @@ export default function Subscription() {
                           <Download className="w-4 h-4 mr-2" />
                           <span className="text-sm">{download}</span>
                         </button>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
                 )}

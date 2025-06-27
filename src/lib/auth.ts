@@ -6,7 +6,7 @@ interface UserMetadata {
   role: UserRole;
   title?: string | null;
   company?: string | null;
-  certifications?: string | null;
+  certifications?: string[] | null
 }
 
 export async function signUp(email: string, password: string, userData: UserMetadata) {
@@ -25,10 +25,19 @@ export async function signUp(email: string, password: string, userData: UserMeta
         emailRedirectTo: `${window.location.origin}/auth/callback`
       }
     });
-    
-    console.log(`emailRedirectTo: ${window.location.origin}/auth/callback`);
-    
     if (error) throw error;
+    
+    const { data: profileData, error: profileError } = await supabase.from('profiles').insert({
+      id: data.user?.id,
+      email: data.user?.email,
+      name: userData.name,
+      role: userData.role,
+      title: userData.title,
+      company: userData.company,
+      certifications: userData.certifications
+    })
+    if (profileError) throw profileError;
+    
     return { data, error: null };
   } catch (error) {
     console.error('Sign up error:', error);

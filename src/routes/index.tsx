@@ -27,7 +27,7 @@ export default function AppRoutes() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/subscription" element={<Subscription />} />
+          <Route path="/subscriptions" element={<Subscription />} />
           <Route
             path="/admin"
             element={

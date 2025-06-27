@@ -17,7 +17,7 @@ export function useLabs() {
       const { data, error } = await supabase
         .from('lab')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('name', { ascending: true });
 
       if (error) throw error;
       setLabs(data || []);

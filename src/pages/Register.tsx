@@ -38,13 +38,16 @@ export default function Register() {
     setLoading(true);
     setError("");
 
+    const certificationsArray = formData.certifications
+      ? formData.certifications.split(",").map((c) => c.trim())
+      : [];
     // Prepare user metadata for profile creation
     const userMetadata = {
       name: formData.name,
       role: formData.role,
       title: formData.title || null,
       company: formData.company || null,
-      certifications: formData.certifications || null,
+      certifications: certificationsArray || null,
     };
 
     const { data, error: signUpError } = await signUp(

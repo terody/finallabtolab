@@ -30,7 +30,9 @@ function Directory() {
   };
 
   const handleClaimLab = (lab: Lab) => {
-    navigate("/subscription");
+    profile?.role === "admin"
+      ? navigate("/subscriptions?labId=" + lab.id)
+      : navigate("/register?labId=" + lab.id);
   };
 
   const handleSaveLab = (updatedLab: Lab) => {
@@ -148,7 +150,6 @@ function Directory() {
                   lab={lab}
                   isAdmin={user ? profile?.role === "admin" : false}
                   onEdit={handleEditLab}
-                  onViewProfile={handleViewProfile}
                   onClaim={handleClaimLab}
                 />
               ))}
