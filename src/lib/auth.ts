@@ -1,23 +1,33 @@
 import { supabase } from './supabase';
 import type { UserRole } from '../types/user';
 
-export async function signUp(email: string, password: string, userData: {
+interface UserMetadata {
   name: string;
   role: UserRole;
-  title?: string;
-  company?: string;
-  certifications?: string;
-}) {
+  title?: string | null;
+  company?: string | null;
+  certifications?: string | null;
+}
+
+export async function signUp(email: string, password: string, userData: UserMetadata) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: userData,
-        emailRedirectTo: `${window.location.href}/auth/callback`
+        data: {
+          name: userData.name,
+          role: userData.role,
+          title: userData.title,
+          company: userData.company,
+          certifications: userData.certifications
+        },
+        emailRedirectTo: `${window.location.origin}/auth/callback`
       }
     });
-    console.log(`emailRedirectTo: ${window.location.href}/auth/callback`)
+    
+    console.log(`emailRedirectTo: ${window.location.origin}/auth/callback`);
+    
     if (error) throw error;
     return { data, error: null };
   } catch (error) {
