@@ -32,21 +32,28 @@ export default function Register() {
       setType("password");
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    const certificationsArray = formData.certifications
+      ? formData.certifications.split(",").map((c) => c.trim())
+      : [];
+    // Prepare user metadata for profile creation
+    const userMetadata = {
+      name: formData.name,
+      role: formData.role,
+      title: formData.title || null,
+      company: formData.company || null,
+      certifications: certificationsArray || null,
+    };
+
     const { data, error: signUpError } = await signUp(
       formData.email,
       formData.password,
-      {
-        name: formData.name,
-        role: formData.role,
-        title: formData.title,
-        company: formData.company,
-        certifications: formData.certifications,
-      }
+      userMetadata
     );
 
     if (signUpError) {
@@ -55,6 +62,8 @@ export default function Register() {
       return;
     }
 
+    // The profile will be automatically created by the database trigger
+    // when the user is inserted into auth.users
     navigate("/login", {
       state: {
         message:
@@ -134,23 +143,28 @@ export default function Register() {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div>
+              <div className="relative mt-1">
                 <input
                   type={type}
                   required
                   minLength={6}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10"
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
                 />
-                <span
-                  className="mt-1 flex justify-around items-center"
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                   onClick={handleToggle}
                 >
-                  <Icon icon={icon} size={20} />
-                </span>
+                  <Icon
+                    icon={icon}
+                    size={20}
+                    className="text-gray-400 hover:text-gray-600"
+                  />
+                </button>
               </div>
               <p className="mt-1 text-sm text-gray-500">
                 Must be at least 6 characters

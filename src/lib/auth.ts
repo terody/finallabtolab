@@ -1,13 +1,15 @@
 import { supabase } from './supabase';
 import type { UserRole } from '../types/user';
 
-export async function signUp(email: string, password: string, userData: {
+interface UserMetadata {
   name: string;
   role: UserRole;
-  title?: string;
-  company?: string;
-  certifications?: string;
-}) {
+  title?: string | null;
+  company?: string | null;
+  certifications?: string[] | null
+}
+
+export async function signUp(email: string, password: string, userData: UserMetadata) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -17,8 +19,19 @@ export async function signUp(email: string, password: string, userData: {
         emailRedirectTo: `${window.location.href}/auth/callback`
       }
     });
-    console.log(`emailRedirectTo: ${window.location.href}/auth/callback`)
     if (error) throw error;
+    
+    const { data: profileData, error: profileError } = await supabase.from('profiles').insert({
+      id: data.user?.id,
+      email: data.user?.email,
+      name: userData.name,
+      role: userData.role,
+      title: userData.title,
+      company: userData.company,
+      certifications: userData.certifications
+    })
+    if (profileError) throw profileError;
+    
     return { data, error: null };
   } catch (error) {
     console.error('Sign up error:', error);
