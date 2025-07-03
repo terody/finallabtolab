@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   X,
   Building2,
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  FileText,
+  Image,
   Award,
   Upload,
   Plus,
@@ -13,37 +20,41 @@ import {
   Truck,
   Shield,
   Users,
+  Calendar,
+  DollarSign,
   Sparkles,
   MessageSquare,
   Download,
 } from "lucide-react";
-import { Lab } from "src/types/lab";
 
 interface BusinessRegistrationFormProps {
   isOpen: boolean;
   onClose: () => void;
   selectedPlan: string;
+  userData?: any;
 }
 
 const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
   isOpen,
   onClose,
   selectedPlan,
+  userData,
 }) => {
-  const [showClaimModal, setShowClaimModal] = useState(false);
-  const [labToClaim, setLabToClaim] = useState<Lab | null>(null);
+  const navigate = useNavigate();
   const [businessType, setBusinessType] = useState("");
   const [customBusinessType, setCustomBusinessType] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [formData, setFormData] = useState({
-    // Basic Information
-    businessName: "",
+    // Basic Information from registration
+    businessName: userData?.name || "",
+    email: userData?.email || "",
+
+    // Business details
     businessAddress: "",
     city: "",
     state: "",
     zipCode: "",
     phone: "",
-    email: "",
     website: "",
     description: "",
 
@@ -153,10 +164,6 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
     "Emergency Response",
   ];
 
-  const handleClaimLab = (lab: Lab) => {
-    setLabToClaim(lab);
-    setShowClaimModal(true);
-  };
   // Get plan features to determine what fields to show
   const getPlanFeatures = () => {
     const planFeatures = {
@@ -194,28 +201,28 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
     index: number,
     value: string
   ) => {
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [field]: prev[field as keyof typeof prev].map((item: string, i: number) =>
-    //     i === index ? value : item
-    //   ),
-    // }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: prev[field as keyof typeof prev].map((item: string, i: number) =>
+        i === index ? value : item
+      ),
+    }));
   };
 
   const addArrayItem = (field: string) => {
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [field]: [...prev[field as keyof typeof prev], ""],
-    // }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: [...prev[field as keyof typeof prev], ""],
+    }));
   };
 
   const removeArrayItem = (field: string, index: number) => {
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [field]: prev[field as keyof typeof prev].filter(
-    //     (_: any, i: number) => i !== index
-    //   ),
-    // }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: prev[field as keyof typeof prev].filter(
+        (_: any, i: number) => i !== index
+      ),
+    }));
   };
 
   const handleCheckboxChange = (
@@ -223,14 +230,14 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
     value: string,
     checked: boolean
   ) => {
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [field]: checked
-    //     ? [...prev[field as keyof typeof prev], value]
-    //     : prev[field as keyof typeof prev].filter(
-    //         (item: string) => item !== value
-    //       ),
-    // }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: checked
+        ? [...prev[field as keyof typeof prev], value]
+        : prev[field as keyof typeof prev].filter(
+            (item: string) => item !== value
+          ),
+    }));
   };
 
   const handleBusinessTypeChange = (typeId: string) => {
@@ -247,13 +254,22 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
     e.preventDefault();
     const finalBusinessType =
       businessType === "custom" ? customBusinessType : businessType;
-    console.log("Form submitted:", {
+    const finalData = {
       businessType: finalBusinessType,
       ...formData,
-    });
+      plan: selectedPlan,
+      role: "business",
+    };
+
+    console.log("Business registration submitted:", finalData);
+
     // Here you would integrate with your backend/payment system
-    alert("Business registration submitted successfully!");
-    onClose();
+    navigate("/dashboard", {
+      state: {
+        plan: selectedPlan,
+        userData: { ...userData, ...finalData },
+      },
+    });
   };
 
   const renderArrayInput = (
@@ -691,7 +707,7 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
           <div className="flex justify-between items-center mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Add Your Business to Directory
+                Complete Your Business Profile
               </h2>
               <p className="text-gray-600 mt-1">
                 Selected Plan:{" "}
@@ -1056,7 +1072,7 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
                     type="submit"
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
-                    Submit Business Registration
+                    Complete Registration & Subscribe
                   </button>
                 </div>
               </>

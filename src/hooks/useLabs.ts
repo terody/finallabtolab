@@ -8,6 +8,7 @@ export function useLabs() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('Fetching labs...');
     fetchLabs();
   }, []);
 

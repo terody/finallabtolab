@@ -15,6 +15,10 @@ function Directory() {
   const { labs, loading, error, searchLabs, refetch } = useLabs();
   const { user, profile } = useAuth();
 
+  const filteredLabs = labs.filter((lab) => {
+    return lab.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   // Debounce search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -123,8 +127,8 @@ function Directory() {
         <>
           <div className="mb-6">
             <p className="text-gray-600">
-              {labs.length} {labs.length === 1 ? "laboratory" : "laboratories"}{" "}
-              found
+              {filteredLabs.length}{" "}
+              {filteredLabs.length === 1 ? "laboratory" : "laboratories"} found
               {searchTerm && ` for "${searchTerm}"`}
               {user?.profile?.role === "admin" && (
                 <span className="ml-2 text-blue-600 font-medium">
@@ -134,7 +138,7 @@ function Directory() {
             </p>
           </div>
 
-          {labs.length === 0 ? (
+          {filteredLabs.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-500 mb-4">
                 <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -144,7 +148,7 @@ function Directory() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {labs.map((lab) => (
+              {filteredLabs.map((lab) => (
                 <LabCard
                   key={lab.id}
                   lab={lab}

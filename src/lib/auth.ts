@@ -9,6 +9,19 @@ interface UserMetadata {
   certifications?: string[] | null
 }
 
+export async function register(email: string, password: string) {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
+}
+
 export async function signUp(email: string, password: string, userData: UserMetadata) {
   try {
     const { data, error } = await supabase.auth.signUp({

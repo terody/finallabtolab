@@ -12,7 +12,8 @@ import Login from "../pages/Login";
 import Marketplace from "../pages/Marketplace";
 import Register from "../pages/Register";
 import Subscription from "../pages/Subscription";
-
+import BusinessSubscriptions from "../pages/BusinessSubscriptions";
+import ProfessionalSubscriptions from "../pages/ProfessionalSubscriptions";
 export default function AppRoutes() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -28,6 +29,14 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/subscriptions" element={<Subscription />} />
+          <Route
+            path="/business-subscriptions"
+            element={<BusinessSubscriptions />}
+          />
+          <Route
+            path="/professional-subscriptions"
+            element={<ProfessionalSubscriptions />}
+          />
           <Route
             path="/admin"
             element={

@@ -1,36 +1,47 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../lib/auth";
-import type { UserRole } from "../types/user";
-
-import { Icon } from "react-icons-kit";
-import { eyeOff } from "react-icons-kit/feather/eyeOff";
-import { eye } from "react-icons-kit/feather/eye";
+import {
+  User,
+  Building2,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Beaker,
+  Package,
+  Settings,
+  Cpu,
+  Truck,
+  Shield,
+  MessageSquare,
+  Sparkles,
+  Users,
+  Briefcase,
+  GraduationCap,
+  Award,
+} from "lucide-react";
+import { register } from "../lib/auth";
 
 export default function Register() {
   const navigate = useNavigate();
+  const [accountType, setAccountType] = useState<"professional" | "business">(
+    "professional"
+  );
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
-    name: "",
-    role: "professional" as UserRole,
-    title: "",
-    company: "",
-    certifications: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState("password");
-  const [icon, setIcon] = useState(eyeOff);
 
-  const handleToggle = () => {
-    if (type === "password") {
-      setIcon(eye);
-      setType("text");
-    } else {
-      setIcon(eyeOff);
-      setType("password");
-    }
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,204 +49,329 @@ export default function Register() {
     setLoading(true);
     setError("");
 
-    const certificationsArray = formData.certifications
-      ? formData.certifications.split(",").map((c) => c.trim())
-      : [];
-    // Prepare user metadata for profile creation
-    const userMetadata = {
-      name: formData.name,
-      role: formData.role,
-      title: formData.title || null,
-      company: formData.company || null,
-      certifications: certificationsArray || null,
-    };
-
-    const { data, error: signUpError } = await signUp(
-      formData.email,
-      formData.password,
-      userMetadata
-    );
-
-    if (signUpError) {
-      setError("Registration failed. Please try again.");
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
       setLoading(false);
       return;
     }
 
-    // The profile will be automatically created by the database trigger
-    // when the user is inserted into auth.users
-    navigate("/login", {
-      state: {
-        message:
-          "Please complete your registration by checking your email and verifying your address.",
-      },
-    });
+    try {
+      const userData = {
+        ...formData,
+        role: accountType,
+      };
+
+      const { data, error: signUpError } = await register(
+        formData.email,
+        formData.password
+      );
+
+      if (signUpError) {
+        setError("Registration failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Redirect to appropriate subscription page
+      if (accountType === "professional") {
+        console.log("Professional profile submitted:", userData);
+        navigate("/professional-subscriptions", { state: { userData } });
+      } else {
+        console.log("Business profile submitted:", userData);
+        navigate("/business-subscriptions", { state: { userData } });
+      }
+    } catch (err) {
+      setError("Registration failed. Please try again.");
+      setLoading(false);
+    }
   };
 
+  const professionalExamples = [
+    {
+      icon: Beaker,
+      title: "Laboratory Technician",
+      description: "Clinical testing and analysis",
+    },
+    {
+      icon: Users,
+      title: "Lab Manager",
+      description: "Laboratory operations oversight",
+    },
+    {
+      icon: GraduationCap,
+      title: "Research Scientist",
+      description: "Scientific research and development",
+    },
+    {
+      icon: Award,
+      title: "Quality Specialist",
+      description: "Compliance and quality assurance",
+    },
+    {
+      icon: Briefcase,
+      title: "Lab Director",
+      description: "Strategic laboratory leadership",
+    },
+  ];
+
+  const businessExamples = [
+    {
+      icon: Beaker,
+      title: "Clinical Laboratory",
+      description: "Diagnostic testing services",
+    },
+    {
+      icon: Settings,
+      title: "Equipment Supplier",
+      description: "Laboratory instruments and tools",
+    },
+    {
+      icon: Package,
+      title: "Reagent Distributor",
+      description: "Laboratory chemicals and supplies",
+    },
+    {
+      icon: Cpu,
+      title: "IT Services",
+      description: "Laboratory information systems",
+    },
+    {
+      icon: Truck,
+      title: "Logistics Provider",
+      description: "Specialized laboratory shipping",
+    },
+    {
+      icon: Shield,
+      title: "Compliance Consultant",
+      description: "Regulatory guidance services",
+    },
+    {
+      icon: MessageSquare,
+      title: "Lab Consultant",
+      description: "Laboratory optimization services",
+    },
+    {
+      icon: Sparkles,
+      title: "Cleaning Services",
+      description: "Specialized laboratory cleaning",
+    },
+  ];
+
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Create an Account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Join our community of laboratory professionals
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Join Our Laboratory Community
+          </h1>
+          <p className="text-lg text-gray-600">
+            Connect with laboratory professionals and businesses across the
+            industry
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg max-w-md mx-auto">
             {error}
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Account Type
-              </label>
-              <select
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                value={formData.role}
-                onChange={(e) =>
-                  setFormData({ ...formData, role: e.target.value as UserRole })
-                }
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Account Type Selection */}
+          <div className="bg-gray-50 px-6 py-6 border-b">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+              What type of account would you like to create?
+            </h2>
+            <div className="flex space-x-4 max-w-md mx-auto">
+              <button
+                type="button"
+                onClick={() => setAccountType("professional")}
+                className={`flex-1 flex items-center justify-center px-4 py-3 rounded-lg font-medium transition-all ${
+                  accountType === "professional"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                }`}
               >
-                <option value="professional">Laboratory Professional</option>
-                <option value="lab">Laboratory</option>
-              </select>
+                <User className="w-5 h-5 mr-2" />
+                Professional
+              </button>
+              <button
+                type="button"
+                onClick={() => setAccountType("business")}
+                className={`flex-1 flex items-center justify-center px-4 py-3 rounded-lg font-medium transition-all ${
+                  accountType === "business"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                }`}
+              >
+                <Building2 className="w-5 h-5 mr-2" />
+                Business
+              </button>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                type="text"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-              />
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Registration Form */}
+            <div className="p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Create Your Account
+              </h3>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                type="email"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="relative mt-1">
-                <input
-                  type={type}
-                  required
-                  minLength={6}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                  onClick={handleToggle}
-                >
-                  <Icon
-                    icon={icon}
-                    size={20}
-                    className="text-gray-400 hover:text-gray-600"
-                  />
-                </button>
-              </div>
-              <p className="mt-1 text-sm text-gray-500">
-                Must be at least 6 characters
-              </p>
-            </div>
-
-            {formData.role === "professional" && (
-              <>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Professional Title
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {accountType === "professional"
+                      ? "Full Name"
+                      : "Business Name"}{" "}
+                    *
                   </label>
                   <input
                     type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
+                    required
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    placeholder={
+                      accountType === "professional"
+                        ? "Enter your full name"
+                        : "Enter your business name"
                     }
-                    placeholder="e.g., Clinical Laboratory Scientist"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Current Company
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address *
                   </label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    value={formData.company}
-                    onChange={(e) =>
-                      setFormData({ ...formData, company: e.target.value })
-                    }
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
+                      placeholder="Enter your email address"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Certifications
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Password *
                   </label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    value={formData.certifications}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        certifications: e.target.value,
-                      })
-                    }
-                    placeholder="e.g., CLS, MLS, MT (ASCP)"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      required
+                      minLength={6}
+                      value={formData.password}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
+                      placeholder="Create a password"
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <Eye className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
                   <p className="mt-1 text-sm text-gray-500">
-                    Separate multiple certifications with commas
+                    Must be at least 6 characters
                   </p>
                 </div>
-              </>
-            )}
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
-            >
-              {loading ? "Creating account..." : "Create Account"}
-            </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading
+                    ? "Creating Account..."
+                    : "Continue to Subscription Plans"}
+                </button>
+
+                <p className="text-center text-sm text-gray-600">
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => navigate("/login")}
+                    className="text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    Sign in here
+                  </button>
+                </p>
+              </form>
+            </div>
+
+            {/* Examples Section */}
+            <div className="bg-gray-50 p-8">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                {accountType === "professional"
+                  ? "Professional Examples"
+                  : "Business Examples"}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {accountType === "professional"
+                  ? "Join laboratory professionals like:"
+                  : "Join laboratory businesses like:"}
+              </p>
+
+              <div className="space-y-4">
+                {(accountType === "professional"
+                  ? professionalExamples
+                  : businessExamples
+                ).map((example, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start p-4 bg-white rounded-lg shadow-sm"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                      {React.createElement(example.icon, {
+                        className: "w-5 h-5 text-blue-600",
+                      })}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">
+                        {example.title}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {example.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">What's Next?</h4>
+                <p className="text-sm text-blue-700">
+                  After creating your account, you'll choose a subscription plan
+                  and complete your detailed profile with{" "}
+                  {accountType === "professional"
+                    ? "your experience, skills, and career preferences"
+                    : "your business information, services, and certifications"}
+                  .
+                </p>
+              </div>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
