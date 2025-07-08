@@ -2,6 +2,22 @@ import { supabase } from '../supabase';
 import { handleDatabaseError } from '../utils/errorHandling';
 import type { UserProfile } from '../../types/user';
 
+export async function createProfile(profile: UserProfile) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert({
+        ...profile
+      })
+      .maybeSingle();
+
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error: handleDatabaseError(error) };
+  }
+}
+
 export async function getProfile(userId: string) {
   try {
     const { data, error } = await supabase

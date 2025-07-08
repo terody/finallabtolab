@@ -39,6 +39,8 @@ import {
   Settings,
   Package,
 } from "lucide-react";
+import { UserProfile } from "src/types/user";
+import { createProfile } from "../lib/api/profiles";
 
 function ProfessionalSubscriptions() {
   const location = useLocation();
@@ -52,61 +54,60 @@ function ProfessionalSubscriptions() {
 
   // Professional titles with dynamic addition capability
   const [professionalTitles, setProfessionalTitles] = useState([
-    "Clinical Laboratory Scientist (CLS)",
-    "Medical Laboratory Scientist (MLS)",
-    "Medical Technologist (MT)",
-    "Medical Laboratory Technician (MLT)",
-    "Clinical Laboratory Technician (CLT)",
-    "Histotechnologist",
-    "Histotechnician",
-    "Cytotechnologist",
-    "Phlebotomist",
-    "Laboratory Manager",
-    "Laboratory Director",
-    "Quality Assurance Manager",
-    "Laboratory Supervisor",
-    "Research Scientist",
-    "Clinical Research Coordinator",
-    "Laboratory Information Systems Specialist",
-    "Molecular Biologist",
-    "Microbiologist",
-    "Hematologist",
-    "Clinical Chemist",
-    "Immunologist",
-    "Pathologist",
-    "Laboratory Safety Officer",
-    "Compliance Officer",
-    "Laboratory Consultant",
-    "Blood Bank Technologist",
-    "Transfusion Medicine Specialist",
-    "Cytogeneticist",
-    "Molecular Geneticist",
-    "Clinical Research Associate",
-    "Laboratory Technician",
-    "Specimen Processor",
-    "Laboratory Assistant",
-    "Quality Control Analyst",
-    "Method Development Scientist",
-    "Validation Specialist",
-    "Laboratory Automation Specialist",
-    "Point of Care Coordinator",
-    "Laboratory Educator",
-    "Technical Writer",
-    "Regulatory Affairs Specialist",
-    "Laboratory Sales Representative",
-    "Field Service Engineer",
+    "Abbott Architect",
     "Applications Specialist",
-    "Product Manager",
-    "Laboratory Consultant",
-    "Forensic Laboratory Analyst",
-    "Environmental Laboratory Technician",
-    "Food Safety Laboratory Analyst",
-    "Veterinary Laboratory Technician",
-    "Research Laboratory Technician",
     "Biorepository Specialist",
+    "Blood Bank Technologist",
+    "Cytogeneticist",
+    "Cytotechnologist",
+    "Clinical Chemist",
+    "Clinical Laboratory Scientist (CLS)",
+    "Clinical Laboratory Technician (CLT)",
+    "Clinical Research Associate",
+    "Clinical Research Coordinator",
+    "Compliance Officer",
+    "Environmental Laboratory Technician",
+    "Field Service Engineer",
+    "Food Safety Laboratory Analyst",
+    "Forensic Laboratory Analyst",
+    "Histotechnician",
+    "Histotechnologist",
+    "Hematologist",
+    "Immunologist",
+    "Laboratory Assistant",
+    "Laboratory Automation Specialist",
     "Laboratory Data Analyst",
-    "LIMS Administrator",
+    "Laboratory Director",
+    "Laboratory Educator",
+    "Laboratory Information Systems Specialist",
+    "Laboratory Manager",
     "Laboratory Procurement Specialist",
+    "Laboratory Safety Officer",
+    "Laboratory Sales Representative",
+    "Laboratory Supervisor",
+    "Laboratory Technician",
+    "LIMS Administrator",
+    "Medical Laboratory Scientist (MLS)",
+    "Medical Laboratory Technician (MLT)",
+    "Medical Technologist (MT)",
+    "Method Development Scientist",
+    "Microbiologist",
+    "Molecular Biologist",
+    "Molecular Geneticist",
+    "Pathologist",
+    "Phlebotomist",
+    "Point of Care Coordinator",
+    "Product Manager",
+    "Quality Assurance Manager",
+    "Quality Control Analyst",
+    "Regulatory Affairs Specialist",
+    "Research Laboratory Technician",
+    "Research Scientist",
+    "Specimen Processor",
+    "Technical Writer",
+    "Transfusion Medicine Specialist",
+    "Validation Specialist",
+    "Veterinary Laboratory Technician",
     "Other",
   ]);
 
@@ -587,8 +588,42 @@ function ProfessionalSubscriptions() {
   const [customKeyword, setCustomKeyword] = useState("");
   const [keywordSearch, setKeywordSearch] = useState("");
 
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    name: "",
+    email: "",
+    title: "",
+    company: "",
+    certifications: "",
+    yearsExperience: "",
+    education: "",
+    specializations: [] as string[],
+    currentSalary: "",
+    desiredSalary: "",
+    location: "",
+    willingToRelocate: false,
+    availabilityDate: "",
+    workPreference: "",
+    shiftPreference: [] as string[],
+    skills: [] as string[],
+    achievements: [""],
+    professionalSummary: "",
+    linkedinProfile: "",
+    references: [""],
+    keywords: [] as string[],
+    resumeFile: null as File | null,
+
+    // Additional professional fields
+    languagesSpoken: [] as string[],
+    publications: [""],
+    presentations: [""],
+    professionalMemberships: [""],
+    volunteerExperience: [""],
+    awards: [""],
+    continuingEducation: [""],
+  } as UserProfile);
+
   // Professional form data
-  const [professionalData, setProfessionalData] = useState({
+  const [zprofessionalData, setProfessionalData] = useState({
     // Basic info from registration
     name: userData?.name || "",
     email: userData?.email || "",
@@ -657,25 +692,25 @@ function ProfessionalSubscriptions() {
   ];
 
   const specializationOptions = [
+    "Automation",
+    "Blood Bank",
     "Clinical Chemistry",
+    "Cytology",
+    "Education & Training",
+    "Genetics",
     "Hematology",
-    "Microbiology",
+    "Histology",
     "Immunology",
+    "Information Systems",
+    "Laboratory Management",
+    "Microbiology",
     "Molecular Diagnostics",
     "Pathology",
-    "Toxicology",
-    "Blood Bank",
-    "Cytology",
-    "Histology",
-    "Genetics",
-    "Quality Assurance",
-    "Laboratory Management",
-    "Research & Development",
     "Point of Care Testing",
-    "Automation",
-    "Information Systems",
+    "Quality Assurance",
     "Regulatory Affairs",
-    "Education & Training",
+    "Research & Development",
+    "Toxicology",
   ];
 
   const languageOptions = [
@@ -696,150 +731,25 @@ function ProfessionalSubscriptions() {
   ];
 
   const workEnvironmentOptions = [
-    "Hospital Laboratory",
-    "Reference Laboratory",
-    "Clinic Laboratory",
-    "Research Laboratory",
     "Academic Medical Center",
-    "Private Practice",
-    "Government Laboratory",
-    "Pharmaceutical Company",
     "Biotechnology Company",
-    "Public Health Laboratory",
-    "Veterinary Laboratory",
+    "Clinic Laboratory",
     "Forensic Laboratory",
+    "Government Laboratory",
+    "Hospital Laboratory",
+    "Pharmaceutical Company",
+    "Private Practice",
+    "Public Health Laboratory",
+    "Reference Laboratory",
+    "Research Laboratory",
+    "Veterinary Laboratory",
   ];
 
   const plans = [
     {
-      id: "basic",
-      name: "Basic Profile",
-      price: "Free",
-      period: "",
-      description: "Essential profile visibility for job seekers",
-      color: "gray",
-      gradient: "from-gray-100 to-gray-200",
-      borderColor: "border-gray-300",
-      buttonStyle: "bg-gray-500 hover:bg-gray-600 text-white",
-      popular: false,
-      features: [
-        { name: "Basic profile with photo", included: true, icon: User },
-        {
-          name: "Professional title and location",
-          included: true,
-          icon: MapPin,
-        },
-        {
-          name: "Basic skills and certifications",
-          included: true,
-          icon: Award,
-        },
-        { name: "Contact information display", included: true, icon: Phone },
-        { name: "Job application tracking", included: true, icon: FileText },
-        { name: "Basic search visibility", included: true, icon: Search },
-        { name: "Up to 25 keywords", included: true, icon: Tag },
-        { name: "Resume upload and storage", included: false, icon: FileText },
-        {
-          name: "Advanced keyword optimization (100 keywords)",
-          included: false,
-          icon: Target,
-        },
-        {
-          name: "Priority in search results",
-          included: false,
-          icon: TrendingUp,
-        },
-        {
-          name: "Direct messaging from employers",
-          included: false,
-          icon: MessageSquare,
-        },
-        {
-          name: "Salary insights and analytics",
-          included: false,
-          icon: DollarSign,
-        },
-        { name: "Career coaching resources", included: false, icon: Users },
-        {
-          name: "Professional portfolio showcase",
-          included: false,
-          icon: Image,
-        },
-        { name: "Interview scheduling tools", included: false, icon: Calendar },
-        { name: "Premium support", included: false, icon: Shield },
-      ],
-    },
-    {
       id: "professional",
       name: "Professional",
       price: "$10",
-      period: "/month",
-      description:
-        "Enhanced visibility and job search tools for active professionals",
-      color: "blue",
-      gradient: "from-blue-50 to-blue-100",
-      borderColor: "border-blue-300",
-      buttonStyle: "bg-blue-600 hover:bg-blue-700 text-white",
-      popular: true,
-      features: [
-        { name: "Basic profile with photo", included: true, icon: User },
-        {
-          name: "Professional title and location",
-          included: true,
-          icon: MapPin,
-        },
-        {
-          name: "Basic skills and certifications",
-          included: true,
-          icon: Award,
-        },
-        { name: "Contact information display", included: true, icon: Phone },
-        { name: "Job application tracking", included: true, icon: FileText },
-        { name: "Basic search visibility", included: true, icon: Search },
-        { name: "Up to 25 keywords", included: true, icon: Tag },
-        { name: "Resume upload and storage", included: true, icon: FileText },
-        {
-          name: "Advanced keyword optimization (100 keywords)",
-          included: true,
-          icon: Target,
-        },
-        {
-          name: "Enhanced profile with portfolio",
-          included: true,
-          icon: Image,
-        },
-        {
-          name: "Direct messaging from employers",
-          included: true,
-          icon: MessageSquare,
-        },
-        {
-          name: "Salary insights for your area",
-          included: true,
-          icon: DollarSign,
-        },
-        { name: "Job alerts and notifications", included: true, icon: Zap },
-        { name: "Application status tracking", included: true, icon: FileText },
-        { name: "Professional networking tools", included: true, icon: Users },
-        {
-          name: "Automatic keyword extraction from resume",
-          included: true,
-          icon: Sparkles,
-        },
-        {
-          name: "Priority in search results",
-          included: false,
-          icon: TrendingUp,
-        },
-        { name: "Career coaching resources", included: false, icon: Users },
-        { name: "Interview scheduling tools", included: false, icon: Calendar },
-        { name: "Premium support", included: false, icon: Shield },
-      ],
-    },
-    {
-      id: "premium",
-      name: "Premium Career",
-      price: "$15",
       period: "/month",
       description: "Complete career advancement platform with premium features",
       color: "purple",
@@ -940,7 +850,7 @@ function ProfessionalSubscriptions() {
   };
 
   const handleInputChange = (field: string, value: any) => {
-    setProfessionalData((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -951,7 +861,7 @@ function ProfessionalSubscriptions() {
     index: number,
     value: string
   ) => {
-    setProfessionalData((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
       [field]: (prev[field as keyof typeof prev] as string[]).map(
         (item: string, i: number) => (i === index ? value : item)
@@ -960,14 +870,14 @@ function ProfessionalSubscriptions() {
   };
 
   const addArrayItem = (field: string) => {
-    setProfessionalData((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
       [field]: [...(prev[field as keyof typeof prev] as string[]), ""],
     }));
   };
 
   const removeArrayItem = (field: string, index: number) => {
-    setProfessionalData((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
       [field]: (prev[field as keyof typeof prev] as string[]).filter(
         (_: any, i: number) => i !== index
@@ -980,7 +890,7 @@ function ProfessionalSubscriptions() {
     value: string,
     checked: boolean
   ) => {
-    setProfessionalData((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
       [field]: checked
         ? [...(prev[field as keyof typeof prev] as string[]), value]
@@ -993,11 +903,11 @@ function ProfessionalSubscriptions() {
   const handleTitleChange = (selectedTitle: string) => {
     if (selectedTitle === "Other") {
       setShowCustomTitleInput(true);
-      setProfessionalData((prev) => ({ ...prev, title: "" }));
+      setUserProfile((prev) => ({ ...prev, title: "" }));
     } else {
       setShowCustomTitleInput(false);
       setCustomTitle("");
-      setProfessionalData((prev) => ({ ...prev, title: selectedTitle }));
+      setUserProfile((prev) => ({ ...prev, title: selectedTitle }));
     }
   };
 
@@ -1009,7 +919,7 @@ function ProfessionalSubscriptions() {
       const newTitles = [...professionalTitles];
       newTitles.splice(-1, 0, customTitle.trim());
       setProfessionalTitles(newTitles);
-      setProfessionalData((prev) => ({ ...prev, title: customTitle.trim() }));
+      setUserProfile((prev) => ({ ...prev, title: customTitle.trim() }));
       setShowCustomTitleInput(false);
       setCustomTitle("");
     }
@@ -1017,7 +927,7 @@ function ProfessionalSubscriptions() {
 
   // Resume upload and keyword extraction
   const handleResumeUpload = (file: File) => {
-    setProfessionalData((prev) => ({ ...prev, resumeFile: file }));
+    setUserProfile((prev) => ({ ...prev, resumeFile: file }));
 
     // Simulate keyword extraction from resume
     // In a real application, you would use a service to parse the resume
@@ -1063,7 +973,7 @@ function ProfessionalSubscriptions() {
 
       const updatedSelectedKeywords = [...selectedKeywords, ...keywordsToAdd];
       setSelectedKeywords(updatedSelectedKeywords);
-      setProfessionalData((prev) => ({
+      setUserProfile((prev) => ({
         ...prev,
         keywords: updatedSelectedKeywords,
       }));
@@ -1093,14 +1003,14 @@ function ProfessionalSubscriptions() {
     ) {
       const updatedKeywords = [...selectedKeywords, keyword];
       setSelectedKeywords(updatedKeywords);
-      setProfessionalData((prev) => ({ ...prev, keywords: updatedKeywords }));
+      setUserProfile((prev) => ({ ...prev, keywords: updatedKeywords }));
     }
   };
 
   const removeKeyword = (keyword: string) => {
     const updatedKeywords = selectedKeywords.filter((k) => k !== keyword);
     setSelectedKeywords(updatedKeywords);
-    setProfessionalData((prev) => ({ ...prev, keywords: updatedKeywords }));
+    setUserProfile((prev) => ({ ...prev, keywords: updatedKeywords }));
   };
 
   const addCustomKeyword = () => {
@@ -1120,7 +1030,7 @@ function ProfessionalSubscriptions() {
       ) {
         const updatedKeywords = [...selectedKeywords, keyword];
         setSelectedKeywords(updatedKeywords);
-        setProfessionalData((prev) => ({ ...prev, keywords: updatedKeywords }));
+        setUserProfile((prev) => ({ ...prev, keywords: updatedKeywords }));
       }
 
       setCustomKeyword("");
@@ -1137,13 +1047,14 @@ function ProfessionalSubscriptions() {
     e.preventDefault();
     console.log("Professional profile submitted:", {
       plan: currentPlan,
-      ...professionalData,
+      ...userProfile,
     });
+    createProfile(userProfile).then((data) => console.log(data));
     // Here you would integrate with your payment system and backend
     navigate("/dashboard", {
       state: {
         plan: currentPlan,
-        userData: { ...userData, ...professionalData, role: "professional" },
+        userData: { ...userData, ...userProfile, role: "professional" },
       },
     });
   };
@@ -1622,9 +1533,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <select
                     required
-                    value={
-                      showCustomTitleInput ? "Other" : professionalData.title
-                    }
+                    value={showCustomTitleInput ? "Other" : userProfile.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
@@ -1662,7 +1571,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <input
                     type="text"
-                    value={professionalData.company}
+                    value={userProfile.company}
                     onChange={(e) =>
                       handleInputChange("company", e.target.value)
                     }
@@ -1676,7 +1585,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <select
                     required
-                    value={professionalData.yearsExperience}
+                    value={userProfile.yearsExperience}
                     onChange={(e) =>
                       handleInputChange("yearsExperience", e.target.value)
                     }
@@ -1699,7 +1608,7 @@ function ProfessionalSubscriptions() {
                   <input
                     type="text"
                     required
-                    value={professionalData.location}
+                    value={userProfile.location}
                     onChange={(e) =>
                       handleInputChange("location", e.target.value)
                     }
@@ -1714,7 +1623,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <select
                     required
-                    value={professionalData.education}
+                    value={userProfile.education}
                     onChange={(e) =>
                       handleInputChange("education", e.target.value)
                     }
@@ -1738,7 +1647,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <input
                     type="text"
-                    value={professionalData.certifications}
+                    value={userProfile.certifications}
                     onChange={(e) =>
                       handleInputChange("certifications", e.target.value)
                     }
@@ -1757,7 +1666,7 @@ function ProfessionalSubscriptions() {
                 </label>
                 <textarea
                   required
-                  value={professionalData.professionalSummary}
+                  value={userProfile.professionalSummary}
                   onChange={(e) =>
                     handleInputChange("professionalSummary", e.target.value)
                   }
@@ -1777,8 +1686,7 @@ function ProfessionalSubscriptions() {
                       <input
                         type="checkbox"
                         checked={
-                          professionalData.specializations?.includes(spec) ||
-                          false
+                          userProfile.specializations?.includes(spec) || false
                         }
                         onChange={(e) =>
                           handleCheckboxChange(
@@ -1822,8 +1730,8 @@ function ProfessionalSubscriptions() {
                   <label htmlFor="resume-upload" className="cursor-pointer">
                     <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">
-                      {professionalData.resumeFile
-                        ? `Uploaded: ${professionalData.resumeFile.name}`
+                      {userProfile.resumeFile
+                        ? `Uploaded: ${userProfile.resumeFile.name}`
                         : "Click to upload your resume (PDF, DOC, DOCX)"}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
@@ -1962,7 +1870,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <select
                     required
-                    value={professionalData.workPreference}
+                    value={userProfile.workPreference}
                     onChange={(e) =>
                       handleInputChange("workPreference", e.target.value)
                     }
@@ -1983,7 +1891,7 @@ function ProfessionalSubscriptions() {
                   </label>
                   <input
                     type="date"
-                    value={professionalData.availabilityDate}
+                    value={userProfile.availabilityDate}
                     onChange={(e) =>
                       handleInputChange("availabilityDate", e.target.value)
                     }
@@ -1996,7 +1904,7 @@ function ProfessionalSubscriptions() {
                     Current Salary Range
                   </label>
                   <select
-                    value={professionalData.currentSalary}
+                    value={userProfile.currentSalary}
                     onChange={(e) =>
                       handleInputChange("currentSalary", e.target.value)
                     }
@@ -2019,7 +1927,7 @@ function ProfessionalSubscriptions() {
                     Desired Salary Range
                   </label>
                   <select
-                    value={professionalData.desiredSalary}
+                    value={userProfile.desiredSalary}
                     onChange={(e) =>
                       handleInputChange("desiredSalary", e.target.value)
                     }
@@ -2042,7 +1950,7 @@ function ProfessionalSubscriptions() {
                     Travel Willingness
                   </label>
                   <select
-                    value={professionalData.travelWillingness}
+                    value={userProfile.travelWillingness}
                     onChange={(e) =>
                       handleInputChange("travelWillingness", e.target.value)
                     }
@@ -2062,7 +1970,7 @@ function ProfessionalSubscriptions() {
                     Security Clearance
                   </label>
                   <select
-                    value={professionalData.securityClearance}
+                    value={userProfile.securityClearance}
                     onChange={(e) =>
                       handleInputChange("securityClearance", e.target.value)
                     }
@@ -2082,7 +1990,7 @@ function ProfessionalSubscriptions() {
                 <label className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={professionalData.willingToRelocate}
+                    checked={userProfile.willingToRelocate}
                     onChange={(e) =>
                       handleInputChange("willingToRelocate", e.target.checked)
                     }
@@ -2104,8 +2012,7 @@ function ProfessionalSubscriptions() {
                       <input
                         type="checkbox"
                         checked={
-                          professionalData.shiftPreference?.includes(shift) ||
-                          false
+                          userProfile.shiftPreference?.includes(shift) || false
                         }
                         onChange={(e) =>
                           handleCheckboxChange(
@@ -2132,9 +2039,8 @@ function ProfessionalSubscriptions() {
                       <input
                         type="checkbox"
                         checked={
-                          professionalData.preferredWorkEnvironment?.includes(
-                            env
-                          ) || false
+                          userProfile.preferredWorkEnvironment?.includes(env) ||
+                          false
                         }
                         onChange={(e) =>
                           handleCheckboxChange(
@@ -2170,8 +2076,7 @@ function ProfessionalSubscriptions() {
                         <input
                           type="checkbox"
                           checked={
-                            professionalData.languagesSpoken?.includes(lang) ||
-                            false
+                            userProfile.languagesSpoken?.includes(lang) || false
                           }
                           onChange={(e) =>
                             handleCheckboxChange(
@@ -2193,7 +2098,7 @@ function ProfessionalSubscriptions() {
                     Career Objectives
                   </label>
                   <textarea
-                    value={professionalData.careerObjectives}
+                    value={userProfile.careerObjectives}
                     onChange={(e) =>
                       handleInputChange("careerObjectives", e.target.value)
                     }
@@ -2208,7 +2113,7 @@ function ProfessionalSubscriptions() {
                     Professional Goals
                   </label>
                   <textarea
-                    value={professionalData.professionalGoals}
+                    value={userProfile.professionalGoals}
                     onChange={(e) =>
                       handleInputChange("professionalGoals", e.target.value)
                     }
@@ -2222,43 +2127,43 @@ function ProfessionalSubscriptions() {
                   "achievements",
                   "Key Achievements",
                   "e.g., Implemented new QC procedures that reduced errors by 25%",
-                  professionalData.achievements
+                  userProfile.achievements
                 )}
                 {renderArrayInput(
                   "awards",
                   "Awards & Recognition",
                   "e.g., Employee of the Year 2023, Quality Excellence Award",
-                  professionalData.awards
+                  userProfile.awards
                 )}
                 {renderArrayInput(
                   "publications",
                   "Publications",
                   'e.g., "Improving Laboratory Efficiency" - Journal of Clinical Laboratory Science',
-                  professionalData.publications
+                  userProfile.publications
                 )}
                 {renderArrayInput(
                   "presentations",
                   "Presentations & Conferences",
                   'e.g., AACC Annual Meeting 2023 - "Automation in Clinical Chemistry"',
-                  professionalData.presentations
+                  userProfile.presentations
                 )}
                 {renderArrayInput(
                   "professionalMemberships",
                   "Professional Memberships",
                   "e.g., ASCLS, AACC, CAP",
-                  professionalData.professionalMemberships
+                  userProfile.professionalMemberships
                 )}
                 {renderArrayInput(
                   "continuingEducation",
                   "Continuing Education",
                   "e.g., Advanced Molecular Diagnostics Course 2023",
-                  professionalData.continuingEducation
+                  userProfile.continuingEducation
                 )}
                 {renderArrayInput(
                   "volunteerExperience",
                   "Volunteer Experience",
                   "e.g., Free Health Clinic Laboratory Services",
-                  professionalData.volunteerExperience
+                  userProfile.volunteerExperience
                 )}
               </div>
             </div>
@@ -2274,7 +2179,7 @@ function ProfessionalSubscriptions() {
                 "references",
                 "Professional References",
                 "Name, Title, Company, Phone/Email",
-                professionalData.references
+                userProfile.references
               )}
             </div>
 
@@ -2358,7 +2263,7 @@ function ProfessionalSubscriptions() {
 
       {/* Pricing Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
           {plans.map((plan) => (
             <div
               key={plan.id}

@@ -7,10 +7,71 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
+      downloads: {
+        Row: {
+          created_at: string
+          filename: string | null
+          filetype: string | null
+          id: string
+          lab_id: string | null
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          filename?: string | null
+          filetype?: string | null
+          id?: string
+          lab_id?: string | null
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          filename?: string | null
+          filetype?: string | null
+          id?: string
+          lab_id?: string | null
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "downloads_lab_id_fkey"
+            columns: ["lab_id"]
+            isOneToOne: false
+            referencedRelation: "lab"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lab: {
         Row: {
+          about: string | null
           address: string | null
           certifications: string[] | null
           claimed: boolean | null
@@ -23,11 +84,13 @@ export type Database = {
           location: string | null
           name: string
           phone: string | null
+          references: string[] | null
           services: string[] | null
           updated_at: string | null
           website: string | null
         }
         Insert: {
+          about?: string | null
           address?: string | null
           certifications?: string[] | null
           claimed?: boolean | null
@@ -40,11 +103,13 @@ export type Database = {
           location?: string | null
           name: string
           phone?: string | null
+          references?: string[] | null
           services?: string[] | null
           updated_at?: string | null
           website?: string | null
         }
         Update: {
+          about?: string | null
           address?: string | null
           certifications?: string[] | null
           claimed?: boolean | null
@@ -57,6 +122,7 @@ export type Database = {
           location?: string | null
           name?: string
           phone?: string | null
+          references?: string[] | null
           services?: string[] | null
           updated_at?: string | null
           website?: string | null
@@ -202,58 +268,46 @@ export type Database = {
           certifications: string[] | null
           company: string | null
           createat: string | null
+          details: Json | null
           email: string
           id: string
+          keywords: string[] | null
           lastlogin: string | null
           name: string | null
           permissions: Json | null
           role: string
+          skills: string[] | null
           title: string | null
         }
         Insert: {
           certifications?: string[] | null
           company?: string | null
           createat?: string | null
+          details?: Json | null
           email: string
           id: string
+          keywords?: string[] | null
           lastlogin?: string | null
           name?: string | null
           permissions?: Json | null
           role?: string
+          skills?: string[] | null
           title?: string | null
         }
         Update: {
           certifications?: string[] | null
           company?: string | null
           createat?: string | null
+          details?: Json | null
           email?: string
           id?: string
+          keywords?: string[] | null
           lastlogin?: string | null
           name?: string | null
           permissions?: Json | null
           role?: string
+          skills?: string[] | null
           title?: string | null
-        }
-        Relationships: []
-      }
-      TodoList: {
-        Row: {
-          created_at: string
-          id: number
-          isCompleted: boolean | null
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          isCompleted?: boolean | null
-          name: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          isCompleted?: boolean | null
-          name?: string
         }
         Relationships: []
       }
@@ -379,6 +433,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
