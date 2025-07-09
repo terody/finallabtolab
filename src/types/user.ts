@@ -20,6 +20,8 @@ export interface UserProfileOld {
   };
 }
   export interface UserProfile {
+    id: string;
+    role: UserRole;
     // Basic info from registration
     name: string;
     email: string;
