@@ -1,75 +1,80 @@
-import { supabase } from './supabase';
-import type { UserRole } from '../types/user';
+import { UserRole } from "src/types/user";
+import { supabase } from "./supabase";
+import { validateUserData } from "./utils/validation";
+import { handleAuthError } from "./utils/errorHandling";
 
-interface UserMetadata {
+
+interface SignUpData {
   name: string;
   role: UserRole;
-  title?: string | null;
-  company?: string | null;
-  certifications?: string[] | null
+  title?: string;
+  company?: string;
+  certifications?: string;
 }
 
 export async function register(email: string, password: string) {
   try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     return { data, error: null };
   } catch (error) {
-    return { data: null, error };
+    return { data: null, error: handleAuthError(error) };
   }
 }
-
-export async function signUp(email: string, password: string, userData: UserMetadata) {
+export async function signUp(email: string, password: string, userData: SignUpData) {
   try {
+    // Validate input data
+    const validationError = validateUserData({ email, password, ...userData });
+    if (validationError) {
+      throw new Error(validationError);
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          name: userData.name,
-          role: userData.role,
-          title: userData.title,
-          company: userData.company,
-          certifications: userData.certifications
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback`
+          ...userData,
+          certifications: userData.certifications ? 
+            userData.certifications.split(',').map(c => c.trim()) : 
+            []
+        }
       }
     });
+
     if (error) throw error;
-    
-    const { data: profileData, error: profileError } = await supabase.from('profiles').insert({
-      id: data.user?.id,
-      email: data.user?.email,
-      name: userData.name,
-      role: userData.role,
-      title: userData.title,
-      company: userData.company,
-      certifications: userData.certifications
-    })
-    if (profileError) throw profileError;
-    
     return { data, error: null };
   } catch (error) {
-    console.error('Sign up error:', error);
-    return { data: null, error };
+    return { data: null, error: handleAuthError(error) };
   }
 }
 
 export async function signIn(email: string, password: string) {
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data: { session }, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
 
     if (error) throw error;
-    return { data, error: null };
+
+    if (!session?.user) {
+      throw new Error('No session created after login');
+    }
+
+    // Get user profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    return { 
+      data: { session, profile }, 
+      error: null 
+    };
   } catch (error) {
-    console.error('Sign in error:', error);
-    return { data: null, error };
+    return { data: null, error: handleAuthError(error) };
   }
 }
 
@@ -79,7 +84,16 @@ export async function signOut() {
     if (error) throw error;
     return { error: null };
   } catch (error) {
-    console.error('Sign out error:', error);
-    return { error };
+    return { error: handleAuthError(error) };
+  }
+}
+
+export async function getCurrentSession() {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    return { data: session, error: null };
+  } catch (error) {
+    return { data: null, error: handleAuthError(error) };
   }
 }

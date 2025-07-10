@@ -1,5 +1,23 @@
-import { supabase } from './supabase';
-import type { UserProfile } from '../types/user';
+import { UserProfile } from "src/types/user";
+import { supabase } from "./supabase";
+import { handleDatabaseError } from "./utils/errorHandling";
+
+
+export async function createProfile(profile: UserProfile) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert({
+        ...profile
+      })
+      .maybeSingle();
+
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error: handleDatabaseError(error) };
+  }
+}
 
 export async function getProfile(userId: string) {
   try {
@@ -7,13 +25,12 @@ export async function getProfile(userId: string) {
       .from('profiles')
       .select('*')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return { data, error: null };
   } catch (error) {
-    console.error('Error fetching profile:', error);
-    return { data: null, error };
+    return { data: null, error: handleDatabaseError(error) };
   }
 }
 
@@ -24,12 +41,11 @@ export async function updateProfile(userId: string, updates: Partial<UserProfile
       .update(updates)
       .eq('id', userId)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return { data, error: null };
   } catch (error) {
-    console.error('Error updating profile:', error);
-    return { data: null, error };
+    return { data: null, error: handleDatabaseError(error) };
   }
 }

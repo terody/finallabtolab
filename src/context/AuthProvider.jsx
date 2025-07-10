@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { signOut as authSignOut } from "../lib/api/auth";
+import { signOut as authSignOut } from "../lib/auth";
 import { getProfile } from "../lib/profiles";
 import { supabase } from "../lib/supabase";
 import { AuthContext } from "./AuthContext";

@@ -1,7 +1,5 @@
 node_modules
 .env
-.vscode/extensions.json
-.vscode/launch.json
-.vscode/settings.json
-src/.DS_Store
-src/lib/.DS_Store
+.vscode
+.DS_Store
+dist

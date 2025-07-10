@@ -40,7 +40,7 @@ import {
   Package,
 } from "lucide-react";
 import { UserProfile } from "src/types/user";
-import { createProfile } from "../lib/api/profiles";
+import { createProfile } from "../lib/profiles";
 
 function ProfessionalSubscriptions() {
   const location = useLocation();

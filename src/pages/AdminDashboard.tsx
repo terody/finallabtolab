@@ -4,7 +4,7 @@ import DashboardLayout from "../components/DashboardLayout";
 import LabClicksChart from "../components/analytics/LabClicksChart";
 import VisitsChart from "../components/analytics/VisitsChart";
 import { useAuth } from "../hooks/useAuth";
-import { getAnalytics } from "../lib/api/analytics";
+import { getAnalytics } from "../lib/analytics";
 
 export default function AdminDashboard() {
   const { profile } = useAuth();
