@@ -4,21 +4,17 @@ import {
   Check,
   X,
   User,
-  Mail,
   Phone,
   MapPin,
-  Globe,
   FileText,
   MessageSquare,
   Image,
   Award,
-  Download,
   Star,
   Users,
   Zap,
   Eye,
   Plus,
-  AlertTriangle,
   Search,
   Briefcase,
   Calendar,
@@ -32,15 +28,13 @@ import {
   Tag,
   GraduationCap,
   Minus,
-  BookOpen,
-  Clock,
   Cpu,
   Beaker,
   Settings,
-  Package,
 } from "lucide-react";
 import { UserProfile } from "src/types/user";
-import { createProfile } from "../lib/profiles";
+import { createProfile, insertUserProfileToDetails } from "../lib/profiles";
+import { useAuth } from "../hooks/useAuth";
 
 function ProfessionalSubscriptions() {
   const location = useLocation();
@@ -49,9 +43,8 @@ function ProfessionalSubscriptions() {
   const [showExample, setShowExample] = useState<string | null>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [currentPlan, setCurrentPlan] = useState("");
-
   const userData = location.state?.userData;
-
+  const { data } = location.state || {};
   // Professional titles with dynamic addition capability
   const [professionalTitles, setProfessionalTitles] = useState([
     "Abbott Architect",
@@ -1042,21 +1035,27 @@ function ProfessionalSubscriptions() {
       keyword.toLowerCase().includes(keywordSearch.toLowerCase()) &&
       !selectedKeywords.includes(keyword)
   );
-
   const handleSubmitProfile = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Professional profile submitted:", {
       plan: currentPlan,
       ...userProfile,
     });
-    createProfile(userProfile).then((data) => console.log(data));
+    // createProfile(userProfile).then((userProfile) => console.log(userProfile));
+    console.log("1", userProfile);
+    console.log("3", data.user.id);
+
+    // console.log("userAuth", profile?.id);
+    insertUserProfileToDetails(data.user.id, userProfile).then((userProfile) =>
+      console.log(userProfile)
+    );
     // Here you would integrate with your payment system and backend
-    navigate("/dashboard", {
-      state: {
-        plan: currentPlan,
-        userData: { ...userData, ...userProfile, role: "professional" },
-      },
-    });
+    // navigate("/dashboard", {
+    //   state: {
+    //     plan: currentPlan,
+    //     userData: { ...userData, ...userProfile, role: "professional" },
+    //   },
+    // });
   };
 
   const renderArrayInput = (

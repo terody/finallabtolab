@@ -12,7 +12,7 @@ interface SignUpData {
   certifications?: string;
 }
 
-export async function register(email: string, password: string) {
+export async function signUp(email: string, password: string) {
   try {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
@@ -21,7 +21,7 @@ export async function register(email: string, password: string) {
     return { data: null, error: handleAuthError(error) };
   }
 }
-export async function signUp(email: string, password: string, userData: SignUpData) {
+export async function signUpOld(email: string, password: string, userData: SignUpData) {
   try {
     // Validate input data
     const validationError = validateUserData({ email, password, ...userData });

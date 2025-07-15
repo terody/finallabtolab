@@ -20,7 +20,8 @@ import {
   GraduationCap,
   Award,
 } from "lucide-react";
-import { register } from "../lib/auth";
+import { signUp } from "../lib/auth";
+import EmailConfirmationModal from "../components/EmailConfirmationModal";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -28,15 +29,15 @@ export default function Register() {
     "professional"
   );
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: "terry",
+    email: "emailfordye+1@gmail.com",
+    password: "111111",
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -61,7 +62,7 @@ export default function Register() {
         role: accountType,
       };
 
-      const { data, error: signUpError } = await register(
+      const { data, error: signUpError } = await signUp(
         formData.email,
         formData.password
       );
@@ -71,19 +72,28 @@ export default function Register() {
         setLoading(false);
         return;
       }
-
+      setShowEmailModal(true);
       // Redirect to appropriate subscription page
-      if (accountType === "professional") {
-        console.log("Professional profile submitted:", userData);
-        navigate("/professional-subscriptions", { state: { userData } });
-      } else {
-        console.log("Business profile submitted:", userData);
-        navigate("/business-subscriptions", { state: { userData } });
-      }
+      // if (accountType === "professional") {
+      //   navigate("/professional-subscriptions", { state: { data } });
+      // } else {
+      //   navigate("/business-subscriptions", { state: { data } });
+      // }
     } catch (err) {
       setError("Registration failed. Please try again.");
       setLoading(false);
     }
+  };
+
+  const handleCloseEmailModal = () => {
+    setShowEmailModal(false);
+    // Optionally redirect to login page
+    navigate("/login", {
+      state: {
+        message:
+          "Please check your email and click the confirmation link to complete registration.",
+      },
+    });
   };
 
   const professionalExamples = [
@@ -373,6 +383,13 @@ export default function Register() {
           </div>
         </div>
       </div>
+      {/* Email Confirmation Modal */}
+      <EmailConfirmationModal
+        isOpen={showEmailModal}
+        onClose={handleCloseEmailModal}
+        email={formData.email}
+        accountType={accountType}
+      />
     </div>
   );
 }

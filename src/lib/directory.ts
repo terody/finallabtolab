@@ -1,5 +1,5 @@
-import { supabase } from '../supabase';
-import { handleDatabaseError } from '../utils/errorHandling';
+import { supabase } from './supabase';
+import { handleDatabaseError } from './utils/errorHandling';
 
 export async function getListings() {
   try {
