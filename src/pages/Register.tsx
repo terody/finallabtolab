@@ -29,9 +29,9 @@ export default function Register() {
     "professional"
   );
   const [formData, setFormData] = useState({
-    name: "terry",
-    email: "emailfordye+1@gmail.com",
-    password: "111111",
+    name: "",
+    email: "",
+    password: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
