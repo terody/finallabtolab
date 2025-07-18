@@ -39,40 +39,6 @@ function BusinessSubscriptions() {
 
   const plans = [
     {
-      id: "free",
-      name: "Unclaimed",
-      price: "Free",
-      period: "",
-      description:
-        "Basic directory listing with stock photo and limited information",
-      color: "gray",
-      gradient: "from-gray-100 to-gray-200",
-      borderColor: "border-gray-300",
-      buttonStyle: "bg-gray-500 hover:bg-gray-600 text-white",
-      popular: false,
-      features: [
-        { name: "Basic stock photo", included: true, icon: Image },
-        { name: "Business name and location", included: true, icon: MapPin },
-        { name: "Basic services list", included: true, icon: FileText },
-        { name: "Certifications display", included: true, icon: Award },
-        { name: "Custom logo upload", included: false, icon: Image },
-        {
-          name: "Editable business information",
-          included: false,
-          icon: FileText,
-        },
-        { name: "View Profile access", included: false, icon: Users },
-        {
-          name: "Direct messaging system",
-          included: false,
-          icon: MessageSquare,
-        },
-        { name: "Contact information display", included: false, icon: Phone },
-        { name: "Website link", included: false, icon: Globe },
-        { name: "Downloadable files", included: false, icon: Download },
-      ],
-    },
-    {
       id: "basic",
       name: "Basic",
       price: "$9",
@@ -168,7 +134,6 @@ function BusinessSubscriptions() {
   const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId);
     // Here you would integrate with your payment system
-    console.log("Selected plan:", planId);
   };
 
   const handleShowExample = (planId: string) => {
@@ -643,7 +608,7 @@ function BusinessSubscriptions() {
 
       {/* Pricing Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-8">
           {plans.map((plan) => (
             <div
               key={plan.id}
@@ -727,7 +692,7 @@ function BusinessSubscriptions() {
                 </div>
 
                 {/* Add New Business Button for Paid Plans */}
-                {plan.id !== "free" && (
+                {/* {plan.id !== "free" && (
                   <div className="mb-4">
                     <button
                       onClick={() => handleAddNewBusiness(plan.name)}
@@ -737,11 +702,11 @@ function BusinessSubscriptions() {
                       Complete Business Profile
                     </button>
                   </div>
-                )}
+                )} */}
 
                 {/* CTA Button */}
                 <button
-                  onClick={() => handleSelectPlan(plan.id)}
+                  onClick={() => handleAddNewBusiness(plan.name)}
                   className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors duration-200 ${plan.buttonStyle}`}
                   disabled={plan.id === "free"}
                 >

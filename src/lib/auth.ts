@@ -14,7 +14,8 @@ interface SignUpData {
 
 export async function signUp(email: string, password: string) {
   try {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const subscriptionUrl = `${window.location.origin}/professional-subscriptions`;
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: subscriptionUrl } });
     if (error) throw error;
     return { data, error: null };
   } catch (error) {

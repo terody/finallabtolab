@@ -164,7 +164,6 @@ export default function Subscription() {
   const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId);
     // Here you would integrate with your payment system
-    console.log("Selected plan:", planId);
   };
 
   const handleShowExample = (planId: string) => {

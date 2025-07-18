@@ -19,20 +19,19 @@ export async function createProfile(profile: UserProfile) {
     return { data: null, error: handleDatabaseError(error) };
   }
 }
-export async function insertUserProfileToDetails(id: string, profile: UserProfile) {
+export async function saveProfessionalProfile(id: string, profile: UserProfile) {
   try {
     const { data, error } = await supabase
       .from('profiles')
       .update({
         details: JSON.stringify(profile)
       })
-      .eq('id', id)
-      .maybeSingle();
+      .eq('id', id).maybeSingle();
 
     if (error) throw error;
-    return { data, error: null };
+    return { error: null };
   } catch (error) {
-    return { data: null, error: handleDatabaseError(error) };
+    return { error: handleDatabaseError(error) };
   }
 }
 export async function getProfile(userId: string) {

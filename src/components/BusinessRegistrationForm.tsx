@@ -261,8 +261,6 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
       role: "business",
     };
 
-    console.log("Business registration submitted:", finalData);
-
     // Here you would integrate with your backend/payment system
     navigate("/dashboard", {
       state: {

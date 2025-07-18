@@ -33,7 +33,7 @@ import {
   Settings,
 } from "lucide-react";
 import { UserProfile } from "src/types/user";
-import { createProfile, insertUserProfileToDetails } from "../lib/profiles";
+import { createProfile, saveProfessionalProfile } from "../lib/profiles";
 import { useAuth } from "../hooks/useAuth";
 
 function ProfessionalSubscriptions() {
@@ -45,6 +45,7 @@ function ProfessionalSubscriptions() {
   const [currentPlan, setCurrentPlan] = useState("");
   const userData = location.state?.userData;
   const { data } = location.state || {};
+  const { user, profile } = useAuth();
   // Professional titles with dynamic addition capability
   const [professionalTitles, setProfessionalTitles] = useState([
     "Abbott Architect",
@@ -1037,25 +1038,14 @@ function ProfessionalSubscriptions() {
   );
   const handleSubmitProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Professional profile submitted:", {
-      plan: currentPlan,
-      ...userProfile,
-    });
-    // createProfile(userProfile).then((userProfile) => console.log(userProfile));
-    console.log("1", userProfile);
-    console.log("3", data.user.id);
-
-    // console.log("userAuth", profile?.id);
-    insertUserProfileToDetails(data.user.id, userProfile).then((userProfile) =>
-      console.log(userProfile)
+    saveProfessionalProfile(user?.id, userProfile).then((userProfile) =>
+      navigate("/dashboard", {
+        state: {
+          plan: currentPlan,
+          userData: { ...userData, ...userProfile, role: "professional" },
+        },
+      })
     );
-    // Here you would integrate with your payment system and backend
-    // navigate("/dashboard", {
-    //   state: {
-    //     plan: currentPlan,
-    //     userData: { ...userData, ...userProfile, role: "professional" },
-    //   },
-    // });
   };
 
   const renderArrayInput = (

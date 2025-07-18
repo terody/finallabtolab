@@ -311,9 +311,7 @@ export default function Register() {
                   disabled={loading}
                   className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading
-                    ? "Creating Account..."
-                    : "Continue to Subscription Plans"}
+                  {loading ? "Creating Account..." : "Create Account"}
                 </button>
 
                 <p className="text-center text-sm text-gray-600">
