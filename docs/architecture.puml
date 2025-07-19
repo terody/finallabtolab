@@ -1,0 +1,489 @@
+@startuml Lab to Lab Platform Architecture
+
+!define RECTANGLE class
+
+' Database Layer
+package "Database (Supabase)" {
+  RECTANGLE profiles {
+    +id: UUID
+    +email: TEXT
+    +role: TEXT
+    +name: TEXT
+    +title: TEXT
+    +company: TEXT
+    +certifications: TEXT[]
+    +permissions: JSONB
+    +created_at: TIMESTAMPTZ
+  }
+  
+  RECTANGLE lab {
+    +id: STRING
+    +name: STRING
+    +location: STRING
+    +address: STRING
+    +phone: STRING
+    +email: STRING
+    +website: STRING
+    +services: STRING[]
+    +certifications: STRING[]
+    +description: STRING
+    +image: STRING
+    +claimed: BOOLEAN
+    +claimed_by: STRING
+  }
+  
+  RECTANGLE page_views {
+    +id: UUID
+    +path: TEXT
+    +timestamp: TIMESTAMPTZ
+  }
+  
+  RECTANGLE lab_clicks {
+    +id: UUID
+    +lab_id: INTEGER
+    +timestamp: TIMESTAMPTZ
+  }
+  
+  RECTANGLE marketplace_listing {
+    +id: STRING
+    +title: STRING
+    +description: STRING
+    +budget: STRING
+    +deadline: STRING
+    +created_by: STRING
+  }
+  
+  RECTANGLE news_article {
+    +id: STRING
+    +title: STRING
+    +description: STRING
+    +url: STRING
+    +image_url: STRING
+    +source: STRING
+    +published_at: STRING
+    +author: STRING
+  }
+  
+  RECTANGLE news_comment {
+    +id: STRING
+    +content: STRING
+    +author: STRING
+    +created_at: STRING
+    +likes: INTEGER
+    +news_article: STRING
+  }
+}
+
+' Authentication Layer
+package "Authentication" {
+  RECTANGLE AuthProvider {
+    +user: User
+    +profile: UserProfile
+    +loading: boolean
+    +signOut(): void
+  }
+  
+  RECTANGLE AuthContext {
+    +user: User
+    +profile: UserProfile
+    +loading: boolean
+    +signOut(): Promise<void>
+  }
+  
+  RECTANGLE "auth.ts" {
+    +signUp(): Promise
+    +signIn(): Promise
+    +signOut(): Promise
+    +getCurrentSession(): Promise
+  }
+}
+
+' API Layer
+package "API Services" {
+  RECTANGLE "supabase.ts" {
+    +createClient()
+    +supabase: SupabaseClient
+  }
+  
+  RECTANGLE "profiles.ts" {
+    +createProfile(): Promise
+    +getProfile(): Promise
+    +updateProfile(): Promise
+    +saveProfessionalProfile(): Promise
+  }
+  
+  RECTANGLE "directory.ts" {
+    +getListings(): Promise
+  }
+  
+  RECTANGLE "analytics.ts" {
+    +trackPageView(): Promise
+    +trackLabClick(): Promise
+    +getAnalytics(): Promise
+  }
+  
+  RECTANGLE "newsService.ts" {
+    +fetchNews(): Promise
+  }
+}
+
+' Components Layer
+package "Components" {
+  RECTANGLE Navbar {
+    +user: User
+    +profile: UserProfile
+    +signOut(): void
+  }
+  
+  RECTANGLE LabCard {
+    +lab: Lab
+    +isAdmin: boolean
+    +onEdit(): void
+    +onClaim(): void
+  }
+  
+  RECTANGLE EditLabModal {
+    +lab: Lab
+    +isOpen: boolean
+    +onClose(): void
+    +onSave(): void
+  }
+  
+  RECTANGLE EmailConfirmationModal {
+    +isOpen: boolean
+    +onClose(): void
+    +email: string
+    +accountType: string
+  }
+  
+  RECTANGLE BusinessRegistrationForm {
+    +isOpen: boolean
+    +onClose(): void
+    +selectedPlan: string
+    +userData: any
+  }
+  
+  RECTANGLE PostCard {
+    +post: Post
+    +onLike(): void
+    +onComment(): void
+    +onEdit(): void
+    +onDelete(): void
+    +currentUserId: string
+  }
+  
+  RECTANGLE GroupCard {
+    +group: Group
+    +onJoin(): void
+    +onLeave(): void
+    +onViewDiscussions(): void
+    +isMember: boolean
+  }
+  
+  RECTANGLE CreateJobModal {
+    +onClose(): void
+    +onSubmit(): void
+  }
+  
+  RECTANGLE BidModal {
+    +listing: MarketplaceListing
+    +onClose(): void
+    +onSubmit(): void
+  }
+  
+  RECTANGLE IndustryNews {
+    +news: NewsArticle[]
+    +loading: boolean
+    +error: string
+  }
+  
+  RECTANGLE DashboardLayout {
+    +children: ReactNode
+  }
+  
+  RECTANGLE RequireAuth {
+    +children: ReactNode
+  }
+  
+  RECTANGLE ErrorBoundary {
+    +children: ReactNode
+    +hasError: boolean
+    +error: Error
+  }
+}
+
+' Pages Layer
+package "Pages" {
+  RECTANGLE Home {
+    +Hero Section
+    +Features Section
+    +Trust Section
+    +CTA Section
+  }
+  
+  RECTANGLE Directory {
+    +labs: Lab[]
+    +loading: boolean
+    +error: string
+    +searchTerm: string
+    +editingLab: Lab
+    +isEditModalOpen: boolean
+  }
+  
+  RECTANGLE Register {
+    +accountType: string
+    +formData: object
+    +showPassword: boolean
+    +error: string
+    +loading: boolean
+    +showEmailModal: boolean
+  }
+  
+  RECTANGLE Login {
+    +formData: object
+    +error: string
+    +loading: boolean
+  }
+  
+  RECTANGLE Community {
+    +view: string
+    +selectedGroup: Group
+    +groups: Group[]
+    +currentUserId: string
+  }
+  
+  RECTANGLE Marketplace {
+    +showCreateModal: boolean
+    +showBidModal: boolean
+    +selectedListing: MarketplaceListing
+    +listings: MarketplaceListing[]
+  }
+  
+  RECTANGLE JobBoard {
+    +jobs: JobPosting[]
+    +showCreateModal: boolean
+    +searchTerm: string
+    +filteredJobs: JobPosting[]
+  }
+  
+  RECTANGLE AdminDashboard {
+    +stats: object
+    +activityData: array
+    +messages: ContactMessage[]
+    +admins: UserProfile[]
+    +showAddAdmin: boolean
+  }
+  
+  RECTANGLE Contact {
+    +formData: object
+    +status: string
+  }
+  
+  RECTANGLE Subscription {
+    +selectedPlan: string
+    +showExample: string
+    +showRegistrationForm: boolean
+    +registrationPlan: string
+  }
+  
+  RECTANGLE BusinessSubscriptions {
+    +selectedPlan: string
+    +showExample: string
+    +showRegistrationForm: boolean
+    +registrationPlan: string
+    +userData: any
+  }
+  
+  RECTANGLE ProfessionalSubscriptions {
+    +Note: File exists but not shown
+  }
+}
+
+' Hooks Layer
+package "Hooks" {
+  RECTANGLE useAuth {
+    +user: User
+    +profile: UserProfile
+    +loading: boolean
+    +signOut(): Promise<void>
+  }
+  
+  RECTANGLE useLabs {
+    +labs: Lab[]
+    +loading: boolean
+    +error: string
+    +refetch(): void
+    +searchLabs(): void
+  }
+}
+
+' Types Layer
+package "Types" {
+  RECTANGLE Lab {
+    +id: number
+    +name: string
+    +location: string
+    +address: string
+    +phone: string
+    +email: string
+    +website: string
+    +services: string[]
+    +certifications: string[]
+    +description: string
+    +image: string
+    +coordinates: object
+    +claimed: boolean
+    +claimedBy: string
+  }
+  
+  RECTANGLE UserProfile {
+    +id: string
+    +role: UserRole
+    +name: string
+    +email: string
+    +title: string
+    +company: string
+    +certifications: string
+    +... (many more fields)
+  }
+  
+  RECTANGLE JobPosting {
+    +id: string
+    +title: string
+    +company: string
+    +location: string
+    +type: string
+    +salary: string
+    +description: string
+    +requirements: string[]
+    +benefits: string[]
+    +postedAt: Date
+    +contact: object
+  }
+  
+  RECTANGLE MarketplaceListing {
+    +id: string
+    +title: string
+    +description: string
+    +budget: string
+    +deadline: Date
+    +category: string
+    +createdAt: Date
+    +createdBy: object
+    +bids: array
+  }
+  
+  RECTANGLE NewsArticle {
+    +id: string
+    +title: string
+    +description: string
+    +url: string
+    +imageUrl: string
+    +source: string
+    +publishedAt: string
+    +author: string
+    +comments: NewsComment[]
+  }
+  
+  RECTANGLE Post {
+    +id: string
+    +userId: string
+    +userName: string
+    +userAvatar: string
+    +content: string
+    +createdAt: Date
+    +likes: number
+    +comments: Comment[]
+    +tags: string[]
+  }
+  
+  RECTANGLE Group {
+    +id: string
+    +name: string
+    +description: string
+    +members: string[]
+    +category: string
+    +image: string
+    +memberCount: number
+    +isPrivate: boolean
+  }
+}
+
+' Main App Structure
+package "App Structure" {
+  RECTANGLE App {
+    +BrowserRouter
+    +AuthProvider
+    +AppRoutes
+    +Debug
+    +ErrorBoundary
+  }
+  
+  RECTANGLE AppRoutes {
+    +Routes and Route definitions
+    +Navbar
+    +Footer
+    +RequireAuth wrapper
+  }
+}
+
+' Relationships
+AuthProvider --> AuthContext
+AuthProvider --> "auth.ts"
+AuthProvider --> "profiles.ts"
+
+useAuth --> AuthContext
+useLabs --> "supabase.ts"
+
+Directory --> LabCard
+Directory --> EditLabModal
+Directory --> useLabs
+Directory --> useAuth
+
+Register --> EmailConfirmationModal
+Register --> "auth.ts"
+
+AdminDashboard --> DashboardLayout
+AdminDashboard --> "analytics.ts"
+
+Community --> GroupCard
+Community --> PostCard
+Community --> IndustryNews
+
+Marketplace --> BidModal
+Marketplace --> CreateListingModal
+
+JobBoard --> CreateJobModal
+
+LabCard --> Lab
+EditLabModal --> Lab
+PostCard --> Post
+GroupCard --> Group
+
+"auth.ts" --> "supabase.ts"
+"profiles.ts" --> "supabase.ts"
+"directory.ts" --> "supabase.ts"
+"analytics.ts" --> "supabase.ts"
+"newsService.ts" --> NewsArticle
+
+App --> AuthProvider
+App --> AppRoutes
+App --> ErrorBoundary
+
+AppRoutes --> Home
+AppRoutes --> Directory
+AppRoutes --> Register
+AppRoutes --> Login
+AppRoutes --> Community
+AppRoutes --> Marketplace
+AppRoutes --> JobBoard
+AppRoutes --> AdminDashboard
+AppRoutes --> Contact
+AppRoutes --> Subscription
+AppRoutes --> BusinessSubscriptions
+
+profiles --> lab : "claimed_by"
+news_comment --> news_article : "news_article"
+lab_clicks --> lab : "lab_id"
+
+@enduml
